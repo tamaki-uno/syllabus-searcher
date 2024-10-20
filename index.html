@@ -7,10 +7,10 @@
 </head>
 <body>
     <h1>Better Syllabus for SFC</h1>
-    <p>このページは、SFCのシラバスをより見やすくするためのページです。</p>
-    <p>作成に協力していただいける方を募集しています。Githubのリポジトリは<a href="https://github.com/tamaki-uno/Better-Syllabus-for-SFC">https://github.com/tamaki-uno/Better-Syllabus-for-SFC</a>です。</p>
+    <p>このページは、SFCのシラバスをより見やすく、検索しやすくしたページです。</p>
+    <!-- <p>作成に協力していただいける方を募集しています。Githubのリポジトリは<a href="https://github.com/tamaki-uno/syllabus-searcher">こちら</a>です。</p> -->
 
-    <form action="">
+    <form action="" id="form">
         <label for="keyword">キーワード</label>
         <input type="text" id="keyword" name="keyword">
         <button id="searchBtn" type="button">検索</button>
@@ -49,10 +49,11 @@
             <input type="checkbox" id="7" name="time" value="7">
             <label for="7">7限</label>
             <h3>分野</h3>
+            <input type="checkbox" id="design" name="field" value="design">
         </details>
     </form>
 
-    <div id="dataDisplay">
+    <div id="resultDisplay">
         <!-- 検索結果 -->
     </div>
 
