@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Better Syllabus for SFC</title>
+</head>
+<body>
+    <h1>Better Syllabus for SFC</h1>
+    <p>このページは、SFCのシラバスをより見やすくするためのページです。</p>
+    <p>作成に協力していただいける方を募集しています。Githubのリポジトリは<a href="https://github.com/tamaki-uno/Better-Syllabus-for-SFC">https://github.com/tamaki-uno/Better-Syllabus-for-SFC</a>です。</p>
+
+    <form action="">
+        <label for="keyword">キーワード</label>
+        <input type="text" id="keyword" name="keyword">
+        <button id="searchBtn" type="button">検索</button>
+        <br>
+        <!-- 追加の検索条件 (トグルで隠せるように) -->
+        <details>
+            <summary>追加の検索条件</summary>
+            <h3>曜日</h3>
+            <input type="checkbox" id="mon" name="day" value="mon">
+            <label for="mon">月</label>
+            <input type="checkbox" id="tue" name="day" value="tue">
+            <label for="tue">火</label>
+            <input type="checkbox" id="wed" name="day" value="wed">
+            <label for="wed">水</label>
+            <input type="checkbox" id="thu" name="day" value="thu">
+            <label for="thu">木</label>
+            <input type="checkbox" id="fri" name="day" value="fri">
+            <label for="fri">金</label>
+            <input type="checkbox" id="sat" name="day" value="sat">
+            <label for="sat">土</label>
+            <input type="checkbox" id="other" name="day" value="other">
+            <label for="other">その他</label>
+            <h3>時限</h3>
+            <input type="checkbox" id="1" name="time" value="1">
+            <label for="1">1限</label>
+            <input type="checkbox" id="2" name="time" value="2">
+            <label for="2">2限</label>
+            <input type="checkbox" id="3" name="time" value="3">
+            <label for="3">3限</label>
+            <input type="checkbox" id="4" name="time" value="4">
+            <label for="4">4限</label>
+            <input type="checkbox" id="5" name="time" value="5">
+            <label for="5">5限</label>
+            <input type="checkbox" id="6" name="time" value="6">
+            <label for="6">6限</label>
+            <input type="checkbox" id="7" name="time" value="7">
+            <label for="7">7限</label>
+            <h3>分野</h3>
+        </details>
+    </form>
+
+    <div id="dataDisplay">
+        <!-- 検索結果 -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+<!-- h1 ページタイトル -->
+<!-- h2 講義名 -->
+<!-- h3 検索項目 -->
+
+<!-- p その他 -->
