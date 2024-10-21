@@ -44,6 +44,7 @@ function dispaly_results(results) {
         const table = document.createElement('table'); // table要素を作成
         const p = document.createElement('p'); // p要素を作成
 
+        div.className = 'tile'; // div要素にクラスを追加
         h2.textContent = ''; // h2要素にテキストを追加
         // table要素に結果を追加
         // for
@@ -56,6 +57,7 @@ function dispaly_results(results) {
     }
 }
 
+// メイン関数
 async function main() {
     // jsonファイルを取得
     const data = await fetchJson('data.json');
@@ -78,4 +80,5 @@ async function main() {
     });
 }
 
+// メイン関数を実行
 main();
