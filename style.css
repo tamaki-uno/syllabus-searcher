@@ -14,3 +14,57 @@ h1{
 p{
     font: inherit;
 }
+form{
+    font: inherit;
+    background-color: #f0f0f0;
+    border-radius: 2em;
+    padding: 1em;
+}
+div#keyword-search{
+    font: inherit;
+    margin: 0.5em;
+    padding: 0em 1em;
+}
+button, summary, input[type="text"], input[type="password"]{
+    font: inherit;
+    border: none;
+    border-radius: 2em;
+    padding: 0.3em 0.6em;
+    margin: 0.5em;
+    background: #ffffff;
+}
+input[type="text"], input[type="password"]{
+    width: 50%;
+}
+button:hover, summary:hover{
+    cursor: pointer;
+    background-color: #e0e0e0;
+}
+label{
+    font: inherit;
+}
+
+details{
+    font: inherit;
+    background-color: #ffffff;
+    border-radius: 2em;
+    padding: 0.5em;
+}
+div#additional-conditions{
+    font: inherit;
+    margin: 0em 1em;
+    padding: 0em 1em;
+}
+h3.condition-group{
+    display: inline-block;
+    font: inherit;
+    font-weight: 300;
+    font-size: 1.5em;
+    margin: 0.3em;
+    padding: 0em 0em;
+
+}
+input[type="checkbox"]{
+    font: inherit;
+    margin: 0em 0em 0em 1em;
+}
