@@ -96,7 +96,8 @@ h2.course-title{
 
 table.course-info{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10em, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    /* grid-template-columns: repeat(auto-fill, maxmin(10em, 1fr)); */
     /* gap: 0.5em; */
     gap: 0;
     /* width: 67%; */
@@ -106,13 +107,13 @@ table.course-info{
 table.course-info th{
     /* table header */
     font: inherit;
-    width: 15em;
+    width: 20em;
     text-align: left;
 }
 table.course-info td{
     /* table data */
     font: inherit;
-    width: 15em;
+    width: 20em;
     background-color: #ffffff;
 }
 p.course-description{
