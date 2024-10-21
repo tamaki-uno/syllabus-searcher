@@ -28,7 +28,7 @@ div#keyword-search{
 button, summary, input[type="text"], input[type="password"]{
     font: inherit;
     border: none;
-    border-radius: 2em;
+    border-radius: 1em;
     padding: 0.3em 0.6em;
     margin: 0.5em;
     background: #ffffff;
@@ -47,7 +47,7 @@ label{
 details{
     font: inherit;
     background-color: #ffffff;
-    border-radius: 2em;
+    border-radius: 1em;
     padding: 0.5em;
 }
 div#additional-conditions{
