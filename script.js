@@ -45,6 +45,10 @@ function dispaly_results(results) {
         const p = document.createElement('p'); // p要素を作成
 
         div.className = 'tile'; // div要素にクラスを追加
+        h2.className = 'course-name'; // h2要素にクラスを追加
+        table.className = 'course-info'; // table要素にクラスを追加
+        p.className = 'course-description'; // p要素にクラスを追加
+
         h2.textContent = ''; // h2要素にテキストを追加
         // table要素に結果を追加
         // for
@@ -61,7 +65,9 @@ function dispaly_results(results) {
 async function main() {
     // jsonファイルを取得
     const data = await fetchJson('data.json');
-    resultDisplay.innerHTML = 'resultDisplay';
+    // resultDisplay.innerHTML = 'resultDisplay';
+    const exampleResults = ['result1', 'result2', 'result3']; // 仮の結果
+    dispaly_results(exampleResults);
     // 検索ボタンにイベントリスナーを追加
     searchBtn.addEventListener('click', async () => {
         resultDisplay.innerHTML = ''; // 表示をリセット
