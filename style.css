@@ -1,0 +1,16 @@
+/* Zen Kaku Gothic Newをimport */
+@import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap');
+
+body {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-weight: 400;
+    font-size: calc(0.5em + vw*0.5);
+    font-style: normal;
+}
+h1{
+    font-weight: 300;
+    font-size: 3em;
+}
+p{
+    font: inherit;
+}
