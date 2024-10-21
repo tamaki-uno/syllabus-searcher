@@ -49,10 +49,31 @@ function dispaly_results(results) {
         table.className = 'course-info'; // table要素にクラスを追加
         p.className = 'course-description'; // p要素にクラスを追加
 
-        h2.textContent = ''; // h2要素にテキストを追加
-        // table要素に結果を追加
-        // for
-        p.textContent = result; // p要素に結果を追加
+        // resultのkeyを取り出し、それぞれを要素に追加
+        for (const key in result) {
+            switch (key) {
+                case 'link':
+                    div.href = result[key]; // div要素にリンクを追加
+                    break;
+                case 'title':
+                    h2.textContent = result[key]; // h2要素にタイトルを追加
+                    break;
+                case 'description':
+                    p.textContent = result[key]; // p要素に説明を追加
+                    break;
+                default:
+                    const tr = document.createElement('tr'); // tr要素を作成 
+                    const th = document.createElement('th'); // th要素を作成
+                    const td = document.createElement('td'); // td要素を作成
+
+                    th.textContent = key; // th要素にkeyを追加
+                    td.textContent = result[key]; // td要素にresult[key]を追加
+                    tr.appendChild(th); // trにthを追加
+                    tr.appendChild(td); // trにtdを追加
+                    table.appendChild(tr); // tableにtrを追加
+                    break;
+            }
+        }
 
         div.appendChild(h2); // divにh2を追加
         div.appendChild(table); // divにtableを追加
@@ -66,7 +87,12 @@ async function main() {
     // jsonファイルを取得
     const data = await fetchJson('data.json');
     // resultDisplay.innerHTML = 'resultDisplay';
-    const exampleResults = ['result1', 'result2', 'result3']; // 仮の結果
+    // const exampleResults = ['result1', 'result2', 'result3']; // 仮の結果
+    const exampleResults = [
+        {link:'', title: 'title1', description: 'description1', day: '月曜日', time: '1限', field: '情報学'},
+        {link:'', title: 'title2', description: 'description2', day: '火曜日', time: '2限', field: '情報学'},
+        {link:'', title: 'title3', description: 'description3', day: '水曜日', time: '3限', field: '情報学'},
+    ]; // 仮の結果
     dispaly_results(exampleResults);
     // 検索ボタンにイベントリスナーを追加
     searchBtn.addEventListener('click', async () => {
