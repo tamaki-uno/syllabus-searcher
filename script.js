@@ -62,9 +62,9 @@ function dispaly_results(results) {
                     p.textContent = result[key]; // p要素に説明を追加
                     break;
                 default:
-                    const tr = document.createElement('tr'); // tr要素を作成 
-                    const th = document.createElement('th'); // th要素を作成
-                    const td = document.createElement('td'); // td要素を作成
+                    const tr = document.createElement('tr'); // tr要素を作成 (table row)
+                    const th = document.createElement('th'); // th要素を作成 (table header)
+                    const td = document.createElement('td'); // td要素を作成 (table data)
 
                     th.textContent = key; // th要素にkeyを追加
                     td.textContent = result[key]; // td要素にresult[key]を追加
