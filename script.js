@@ -52,13 +52,13 @@ function dispaly_results(results) {
         // resultのkeyを取り出し、それぞれを要素に追加
         for (const key in result) {
             switch (key) {
-                case 'link':
+                case 'URL':
                     div.href = result[key]; // div要素にリンクを追加
                     break;
-                case 'title':
+                case '科目名':
                     h2.textContent = result[key]; // h2要素にタイトルを追加
                     break;
-                case 'description':
+                case '講義概要':
                     p.textContent = result[key]; // p要素に説明を追加
                     break;
                 default:
@@ -86,13 +86,7 @@ function dispaly_results(results) {
 async function main() {
     // jsonファイルを取得
     const data = await fetchJson('data.json');
-    // resultDisplay.innerHTML = 'resultDisplay';
-    // const exampleResults = ['result1', 'result2', 'result3']; // 仮の結果
-    const exampleResults = [
-        {link:'', title: 'title1', description: 'description1', day: '月曜日', time: '1限', field: '情報学'},
-        {link:'', title: 'title2', description: 'description2', day: '火曜日', time: '2限', field: '情報学'},
-        {link:'', title: 'title3', description: 'description3', day: '水曜日', time: '3限', field: '情報学'},
-    ]; // 仮の結果
+    const exampleResults = data.slice(0, 3); // 例として最初の3つのデータを取得
     dispaly_results(exampleResults);
     // 検索ボタンにイベントリスナーを追加
     searchBtn.addEventListener('click', async () => {
