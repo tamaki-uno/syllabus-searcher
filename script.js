@@ -45,7 +45,7 @@ async function searchCourse(data, keyword, days, times, fields) {
 }
 
 // 結果を表示する関数
-function dispaly_results(results) {
+function dispalyResults(results) {
     for (const result of results) {
         const div = document.createElement('div'); // div要素を作成
         const h2 = document.createElement('h2'); // h2要素を作成
@@ -109,6 +109,8 @@ class SearchResult {
         this.resultDisplay = document.getElementById('resultDisplay'); // 結果を表示する場所 (div要素)
         this.results = []; // 検索結果 json
         this.tiles = []; // 検索結果 CourseTile
+        this.sortType = '科目名'; // ソートの種類
+        this.sortOrder = 'ascending'; // ソートの順番
     }
     // 検索結果を表示するメソッド
     dispalyResults() {
@@ -127,8 +129,11 @@ class SearchResult {
         this.sortTiles();
     }
     // タイルを並べ替えるメソッド
-    sortTiles(sortType='科目名', sortOrder='ascending') {
+    sortTiles(sortType=this.sortType, sortOrder=this.sortOrder) {
         console.log('sortTiles');
+        this.sortType = document.getElementById('sortType').value;
+        this.sortOrder = document.getElementById('sortOrder').value;
+        this.sortType = sortType;
         this.results.sort((a, b) => {
             // 並べ替えの条件によって比較
             if (sortOrder === 'ascending') {
@@ -137,14 +142,13 @@ class SearchResult {
                 return b.courseData[sortType] - a.courseData[sortType];
             }
         });
-        this.dispalyResults(); // タイルを表示
     }
 }
 
 class CourseTile {
-    constructor(courseData) {
+    constructor(courseData, properties) {
         this.courseData = courseData;
-        this.tile = this.createTile(courseData);
+        this.tile = this.createTile(courseData, properties);
     }
     // タイルのdiv要素を作成するメソッド
     createTile(courseData, properties) {
@@ -201,8 +205,6 @@ class CourseTile {
         this.div.appendChild(p); // divにpを追加
         return this.div;
     }
-
-
 }
 
 // メイン関数
@@ -213,27 +215,40 @@ async function main() {
     const SORT = document.getElementById('sort'); // ソートのdiv
     const SEARCH_BTN = document.getElementById('searchBtn'); // 検索ボタン
     const SORT_BTN = document.getElementById('sortBtn'); // ソートボタン
-    const RESULT_DISPLAY = document.getElementById('resultDisplay');   // 結果を表示する場所
+    // const RESULT_DISPLAY = document.getElementById('resultDisplay');   // 結果を表示する場所
+    const RESULT_DISPLAY = new SearchResult(); // 検索結果のクラス
 
     // jsonファイルを取得
-    const data = await fetchJson('data.json');
-    const exampleResults = data.slice(0, 3); // 例として最初の3つのデータを取得
-    dispaly_results(exampleResults);
-    // 検索ボタンにイベントリスナーを追加
-    searchBtn.addEventListener('click', async () => {
-        resultDisplay.innerHTML = ''; // 表示をリセット
-        // const day = form.elements['day'].value; // dayの値を取得
-        // const time = form.details.elements['time'].value; // timeの値を取得
-        // const field = form.field.value; // fieldの値を取得
-        // キーワードを取得
-        const keyword = form.keyword.value; // キーワードを取得
+    const DATA = await fetchJson('data.json');
 
-        // チェックボックスの値を取得（配列で取得）
-        const days = Array.from(form.querySelectorAll('input[name="day"]:checked')).map(input => input.value); // dayの値を取得
-        const times = Array.from(form.querySelectorAll('input[name="time"]:checked')).map(input => input.value); // timeの値を取得
-        const fields = Array.from(form.querySelectorAll('input[name="field"]:checked')).map(input => input.value); // fieldの値を取得
-        const results = await searchCourse(data, keyword, days, times, fields); // 検索
-        dispaly_results(results); // 結果を表示
+    // 例の表示
+    let exampleResults = DATA.slice(0, 3); // 例として最初の3つのデータを取得
+    dispalyResults(exampleResults); // 例を表示
+
+    // 検索ボタンにイベントリスナーを追加
+    SEARCH_BTN.addEventListener('click', async () => {
+        console.log('search');
+        RESULT_DISPLAY.innerHTML = ''; // 表示をリセット
+        // フォームの値を取得 (キーワード、曜日、時限、分野をそれぞれ配列で取得)
+        const KEYWORD = FORM.keyword.value; // キーワードを取得
+        const DAYS = Array.from(
+            ADDITIONAL_CONDITIONS.querySelectorAll('input[name="day"]:checked')
+        ).map(input => input.value); // dayの値を取得
+        // クエリセレクタでnameがdayで、checkedのinput要素を取得し、そのvalueを取得
+        // mapで取得したそれぞれのinput要素に対して、valueを取得し、配列に格納
+        const TIMES = Array.from(ADDITIONAL_CONDITIONS.querySelectorAll('input[name="time"]:checked')).map(input => input.value); // timeの値を取得
+        const FIELDS = Array.from(ADDITIONAL_CONDITIONS.querySelectorAll('input[name="field"]:checked')).map(input => input.value); // fieldの値を取得
+        // 検索と表示
+        const RESULTS = await searchCourse(DATA, KEYWORD, DAYS, TIMES, FIELDS); // 検索
+        // dispalyResults(RESULTS); // 結果を表示
+        RESULT_DISPLAY.setResults(RESULTS); // 結果をセット
+        RESULT_DISPLAY.dispalyResults(); // 結果を表示
+    });
+    SORT_BTN.addEventListener('click', () => {
+        console.log('sort');
+        // sort_course(data); // ソート
+        RESULT_DISPLAY.sortTiles(); // タイルをソート
+        RESULT_DISPLAY.dispalyResults(); // 結果を表示
     });
 }
 
