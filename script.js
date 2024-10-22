@@ -41,25 +41,36 @@ function dispaly_results(results) {
     for (const result of results) {
         const div = document.createElement('div'); // div要素を作成
         const h2 = document.createElement('h2'); // h2要素を作成
+        const a = document.createElement('a'); // a要素を作成
         const table = document.createElement('table'); // table要素を作成
+        const h3 = document.createElement('h3'); // h3要素を作成
         const p = document.createElement('p'); // p要素を作成
 
         div.className = 'tile'; // div要素にクラスを追加
         h2.className = 'course-name'; // h2要素にクラスを追加
+        a.className = 'inherit'; // a要素にクラスを追加
+        a.target = '_blank'; // a要素にtargetを追加 (新しいタブで開く)
+        a.rel = 'noopener noreferrer'; // a要素にrelを追加 (セキュリティ対策)
         table.className = 'course-info'; // table要素にクラスを追加
+        h3.className = 'course-description-title'; // h3要素にクラスを追加
         p.className = 'course-description'; // p要素にクラスを追加
 
         // resultのkeyを取り出し、それぞれを要素に追加
         for (const key in result) {
             switch (key) {
                 case 'URL':
+                    console.log('URL', result[key]);
                     div.href = result[key]; // div要素にリンクを追加
+                    h2.href = result[key]; // h2要素にリンクを追加
+                    a.href = result[key]; // a要素にリンクを追加
                     break;
                 case '科目名':
-                    h2.textContent = result[key]; // h2要素にタイトルを追加
+                    a.textContent = result[key]; // a要素に科目名を追加
+                    h2.appendChild(a); // h2にaを追加
                     break;
                 case '講義概要':
-                    p.textContent = result[key]; // p要素に説明を追加
+                    h3.textContent = '講義概要'; // h3要素にタイトルを追加
+                    p.innerHTML = result[key].replace(/\n/g, '<br>'); // p要素に講義概要を追加 (改行をbrに変換)
                     break;
                 default:
                     const tr = document.createElement('tr'); // tr要素を作成 (table row)
@@ -77,6 +88,7 @@ function dispaly_results(results) {
 
         div.appendChild(h2); // divにh2を追加
         div.appendChild(table); // divにtableを追加
+        div.appendChild(h3); // divにh3を追加
         div.appendChild(p); // divにpを追加
         resultDisplay.appendChild(div); // resultにdivを追加
     }
