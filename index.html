@@ -65,8 +65,19 @@
                 <input type="checkbox" id="design" name="field" value="design">
             </div>
         </details>
+        <label for="sort">並べ替え</label>
+        <select name="sort" id="sort">
+            <option value="default">デフォルト</option>
+            <option value="name-ascending">講義名（昇順）</option>
+            <option value="name-descending">講義名（降順）</option>
+            <option value="day-ascending">曜日（昇順）</option>
+            <option value="day-descending">曜日（降順）</option>
+            <option value="time-ascending">時限（昇順）</option>
+            <option value="time-descending">時限（降順）</option>
+            <option value="field-ascending">分野（昇順）</option>
+            <option value="field-descending">分野（降順）</option>
+        </select>
     </form>
-
     <div id="resultDisplay">
         <!-- 検索結果 -->
     </div>
