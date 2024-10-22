@@ -54,14 +54,14 @@ function dispalyResults(results) {
         const h3 = document.createElement('h3'); // h3要素を作成
         const p = document.createElement('p'); // p要素を作成
 
-        div.className = 'tile'; // div要素にクラスを追加
+        div.className = 'round-box tile'; // div要素にクラスを追加
         h2.className = 'course-name'; // h2要素にクラスを追加
         a.className = 'inherit'; // a要素にクラスを追加
         a.target = '_blank'; // a要素にtargetを追加 (新しいタブで開く)
         a.rel = 'noopener noreferrer'; // a要素にrelを追加 (セキュリティ対策)
         table.className = 'course-info'; // table要素にクラスを追加
         h3.className = 'course-description-title'; // h3要素にクラスを追加
-        p.className = 'course-description'; // p要素にクラスを追加
+        p.className = 'round-box course-description'; // p要素にクラスを追加
 
         // resultのkeyを取り出し、それぞれを要素に追加
         for (const key in result) {
