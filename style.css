@@ -1,6 +1,7 @@
 /* Zen Kaku Gothic Newをimport */
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap');
 
+/* 全体 */
 body {
     font-family: "Zen Kaku Gothic New", sans-serif;
     font-weight: 400;
@@ -14,6 +15,7 @@ h1{
 p{
     font: inherit;
 }
+/* form */
 form{
     font: inherit;
     background-color: #f0f0f0;
@@ -43,7 +45,7 @@ button:hover, summary:hover{
 label{
     font: inherit;
 }
-
+/* トグルスイッチのところ */
 details{
     font: inherit;
     background-color: #ffffff;
@@ -67,4 +69,53 @@ h3.condition-group{
 input[type="checkbox"]{
     font: inherit;
     margin: 0em 0em 0em 1em;
+}
+
+/* 検索結果 */
+div#resultDisplay{
+    font: inherit;
+    margin: 1em;
+    padding: 1em;
+    border-radius: 2em;
+    background-color: #f0f0f0;
+}
+div.tile{
+    font: inherit;
+    margin: 0.5em;
+    padding: 0.3em 1em;
+    border-radius: 1em;
+    background-color: #ffffff;
+}
+h2.course-title{
+    font: inherit;
+    font-weight: 300;
+    font-size: 2em;
+    margin: 0.5em;
+    padding: 0em 0em;
+}
+
+table.course-info{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
+    /* grid-template-columns: repeat(auto-fill, maxmin(10em, 1fr)); */
+    /* gap: 0.5em; */
+    gap: 0;
+    /* width: 67%; */
+    font: inherit;
+    background-color: #f0f0f0;
+}
+table.course-info th{
+    /* table header */
+    font: inherit;
+    width: 20em;
+    text-align: left;
+}
+table.course-info td{
+    /* table data */
+    font: inherit;
+    width: 20em;
+    background-color: #ffffff;
+}
+p.course-description{
+    font: inherit;
 }
