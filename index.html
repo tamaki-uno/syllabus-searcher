@@ -9,26 +9,35 @@
     メールアドレス:t23149tu
     RG:tmk
  -->
+
+ <!-- 
+    id/name/classの命名規則
+        id: キャメルケース javascript専用
+        name: キャメルケース form専用 javascript専用
+        class:　ハイフンつなぎ css専用
+  -->
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <title>Unofficial Syllabus</title>
+    <link rel="icon" href="favicon.svg">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Better Syllabus for SFC</h1>
+    <h1 class="title">Better Syllabus for SFC</h1>
     <p>このページは、SFCのシラバスをより見やすく、検索しやすくしたページです。</p>
     <p>ご意見・ご感想・ご要望・ご所望・ご期待・ご希望・ ご提案・ご意向・ご指摘 ・ご協力 ・ご依頼などは<a href="https://forms.gle/HxYLTkquxzozsv3UA">こちらのGoogle フォーム</a>まで。</p>
-    <form action="" id="form">
-        <div id="keyword-search">
+    <form action="" id="form" class="form">
+        <div id="keywordSearch" class="search">
             <label for="keyword">キーワード</label>
-            <input type="text" id="keyword" name="keyword">
-            <button id="searchBtn" type="button">検索</button>
+            <input type="text" id="searchKeyword" class="search-text round-box" name="keyword">
+            <button id="searchBtn" class="search-btn round-box" type="button">検索</button>
         </div>
         <!-- 追加の検索条件 (トグルで隠せるように) -->
         <details>
             <summary>追加の検索条件</summary>
-            <div id="additional-conditions">
+            <div id="additional-conditions" class="condition">
                 <h3 class="condition-group">曜日</h3>
                 <input type="checkbox" id="mon" name="day" value="mon">
                 <label for="mon">月</label>
@@ -67,7 +76,7 @@
         </details>
         <details>
             <summary>表示項目</summary>
-            <div id="display-conditions">
+            <div id="display-conditions" class="condition">
                 <input type="checkbox" id="day" name="display" value="day">
                 <label for="day">曜日</label>
                 <input type="checkbox" id="time" name="display" value="time">
@@ -75,20 +84,20 @@
                 <input type="checkbox" id="field" name="display" value="field">
                 <label for="field">分野</label>
         </details>
-        <div id="sort">
+        <div id="sort" class="sort">
             <label for="sort">並べ替え</label>
-            <select name="sort" id="sortType">
+            <select name="sort" id="sortType" class="round-box">
                 <option value="default">デフォルト</option>
                 <option value="name">講義名</option>
                 <option value="day">曜日</option>
                 <option value="time">時限</option>
                 <option value="field">分野</option>
             </select>
-            <select name="sort" id="sortOrder">
+            <select name="sort" id="sortOrder" class="round-box">
                 <option value="ascending">昇順</option>
                 <option value="descending">降順</option>
             </select>
-            <button id="sortBtn" type="button">決定</button>
+            <button id="sortBtn" class="round-box" type="button">決定</button>
             <!-- <button id="sortBtn" type="button">並べ替え</button> -->
         </div>
     </form>
