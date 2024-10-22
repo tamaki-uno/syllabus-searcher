@@ -73,7 +73,7 @@ div#additional-conditions, div.display-conditions{
 h3.condition-group{
     display: inline-block;
     font: inherit;
-    font-weight: 300;
+    font-weight: bolder;
     font-size: 1em;
     margin: 0em;
     padding: 0.5em;
@@ -131,20 +131,26 @@ table.course-info tr{
     border-color: #e0e0e0;
     border-width: 1px;
     border-style: solid;
-    padding: 0;
-    margin: 0;
+    padding: 0em;
+    margin: 0em;
+}
+table.course-info th, table.course-info td{
+    /* table header and data */
+    /* display: inline-block; */
+    font: inherit;
+    text-align: left;
+    width: 10em;
+    height: 100%;
+    padding: 0em 0.5em;
+    margin: 0em;
 }
 table.course-info th{
     /* table header */
-    font: inherit;
-    width: 10em;
-    text-align: left;
+    font-weight: bolder;
     background-color: #f0f0f0;
 }
 table.course-info td{
     /* table data */
-    font: inherit;
-    width: 10em;
     background-color: #ffffff;
 }
 h3.course-description{
