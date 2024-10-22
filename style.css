@@ -26,28 +26,36 @@ a.inherit{
     color: inherit;
 }
 
-/* form */
-form{
+/* 共通角丸 */
+.round-space{
     font: inherit;
-    background-color: #f0f0f0;
-    border-radius: 2em;
+    margin: 1em;
     padding: 1em;
+    border-radius: 2em;
+    background-color: #f0f0f0;
 }
-div#keyword-search{
-    font: inherit;
-    margin: 0.5em;
-    padding: 0em 1em;
-}
-button, summary, input[type="text"], input[type="password"], select{
+.round-box{
     font: inherit;
     border: none;
     border-radius: 1em;
     padding: 0.3em 0.6em;
+    /* padding: 0.5em; */
     margin: 0.5em;
     background: #ffffff;
 }
-input[type="text"], input[type="password"]{
+
+
+/* form */
+.search, .sort, .condition{
+    font: inherit;
+    /* margin: 0.5em; */
+    padding: 0em 1.5em;
+}
+input.search-text{
     width: 50%;
+}
+input[type="checkbox"]{
+    margin: 0em 0em 0em 1em;
 }
 button:hover, summary:hover{
     cursor: pointer;
@@ -56,19 +64,6 @@ button:hover, summary:hover{
 label{
     font: inherit;
     margin: 0.5em;
-}
-/* トグルスイッチのところ */
-details{
-    font: inherit;
-    background-color: #ffffff;
-    border-radius: 1em;
-    padding: 0.5em;
-    margin: 0.5em;
-}
-div#additional-conditions, div.display-conditions{
-    font: inherit;
-    margin: 0em 1em;
-    padding: 0em 1em;
 }
 h3.condition-group{
     display: inline-block;
@@ -79,31 +74,10 @@ h3.condition-group{
     padding: 0.5em;
     background-color: #f0f0f0;
 }
-input[type="checkbox"]{
-    font: inherit;
-    margin: 0em 0em 0em 1em;
-}
-/* 並べ替え */
-div#sort{
-    font: inherit;
-    margin: 0.5em;
-    padding: 0em 1em;
-}
 
 /* 検索結果 */
-div#resultDisplay{
-    font: inherit;
-    margin: 1em;
-    padding: 1em;
-    border-radius: 2em;
-    background-color: #f0f0f0;
-}
 div.tile{
-    font: inherit;
-    margin: 0.5em;
-    padding: 0.3em 1em;
-    border-radius: 1em;
-    background-color: #ffffff;
+    padding: 1em 2em;
 }
 h2.course-title{
     font: inherit;
@@ -112,7 +86,6 @@ h2.course-title{
     margin: 0.5em;
     padding: 0em 0em;
 }
-
 table.course-info{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
@@ -163,12 +136,9 @@ h3.course-description{
     padding: 0em 0em;
 }
 p.course-description{
-    font: inherit;
+    background-color: #f0f0f0;
     height: 10em;
     overflow: auto;
     /* scrollbar-width: thin; */
     scrollbar-width: none;
-    background-color: #f0f0f0;
-    border-radius: 1em;
-    padding: 0.5em;
 }
