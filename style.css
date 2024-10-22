@@ -19,7 +19,7 @@ a{
     font: inherit;
     text-decoration: underline;
     /* text-decoration-thickness: 0.1em; */
-    font-style: italic;
+    /* font-style: italic; */
 }
 a.inherit{
     font: inherit;
@@ -38,7 +38,7 @@ div#keyword-search{
     margin: 0.5em;
     padding: 0em 1em;
 }
-button, summary, input[type="text"], input[type="password"]{
+button, summary, input[type="text"], input[type="password"], select{
     font: inherit;
     border: none;
     border-radius: 1em;
@@ -55,6 +55,7 @@ button:hover, summary:hover{
 }
 label{
     font: inherit;
+    margin: 0.5em;
 }
 /* トグルスイッチのところ */
 details{
@@ -62,8 +63,9 @@ details{
     background-color: #ffffff;
     border-radius: 1em;
     padding: 0.5em;
+    margin: 0.5em;
 }
-div#additional-conditions{
+div#additional-conditions, div.display-conditions{
     font: inherit;
     margin: 0em 1em;
     padding: 0em 1em;
@@ -72,14 +74,20 @@ h3.condition-group{
     display: inline-block;
     font: inherit;
     font-weight: 300;
-    font-size: 1.5em;
-    margin: 0.3em;
-    padding: 0em 0em;
-
+    font-size: 1em;
+    margin: 0em;
+    padding: 0.5em;
+    background-color: #f0f0f0;
 }
 input[type="checkbox"]{
     font: inherit;
     margin: 0em 0em 0em 1em;
+}
+/* 並べ替え */
+div#sort-order{
+    font: inherit;
+    margin: 0.5em;
+    padding: 0em 1em;
 }
 
 /* 検索結果 */
