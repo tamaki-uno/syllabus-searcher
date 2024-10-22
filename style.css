@@ -1,13 +1,30 @@
 /* Zen Kaku Gothic Newをimport */
 @import url('https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New&display=swap');
 
+/* 
+px: pixel
+%: percent of parent
+rem: root em (html)
+em: relative em (parent)
+vw: viewport width (1% of viewport width)
+vh: viewport height (1% of viewport height)
+vmin: viewport width or heightの小さい方
+vmax: viewport width or heightの大きい方
+*/
+
 /* 全体 */
-body {
+html{
     font-family: "Zen Kaku Gothic New", sans-serif;
     font-weight: 400;
-    /* font-size: calc(0.5em + vw*0.5); */
-    font-style: normal;
+    font-size: max(1rem, 2vmin);
 }
+/* body {
+    font-family: "Zen Kaku Gothic New", sans-serif;
+    font-weight: 400;
+    font-size: calc(0.5em + vw*0.5);
+    font-size: calc(0.5*vm);
+    font-style: normal;
+} */
 h1{
     font-weight: 300;
     font-size: 3em;
