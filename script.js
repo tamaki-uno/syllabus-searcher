@@ -104,6 +104,14 @@ function dispaly_results(results) {
 
 // メイン関数
 async function main() {
+    // htmlの要素を取得
+    const FORM = document.getElementById('form'); // form要素
+    const ADDITIONAL_CONDITIONS = document.getElementById('additional-conditions'); // 追加の条件のdiv
+    const SORT = document.getElementById('sort'); // ソートのdiv
+    const SEARCH_BTN = document.getElementById('searchBtn'); // 検索ボタン
+    const SORT_BTN = document.getElementById('sortBtn'); // ソートボタン
+    const RESULT_DISPLAY = document.getElementById('resultDisplay');   // 結果を表示する場所
+
     // jsonファイルを取得
     const data = await fetchJson('data.json');
     const exampleResults = data.slice(0, 3); // 例として最初の3つのデータを取得
