@@ -73,7 +73,7 @@ div#additional-conditions, div.display-conditions{
 h3.condition-group{
     display: inline-block;
     font: inherit;
-    font-weight: 300;
+    font-weight: bolder;
     font-size: 1em;
     margin: 0em;
     padding: 0.5em;
