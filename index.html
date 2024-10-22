@@ -75,19 +75,21 @@
                 <input type="checkbox" id="field" name="display" value="field">
                 <label for="field">分野</label>
         </details>
-        <div id="sort-order">
+        <div id="sort">
             <label for="sort">並べ替え</label>
-            <select name="sort" id="sort-type">
+            <select name="sort" id="sortType">
                 <option value="default">デフォルト</option>
                 <option value="name">講義名</option>
                 <option value="day">曜日</option>
                 <option value="time">時限</option>
                 <option value="field">分野</option>
             </select>
-            <select name="sort" id="sort-order">
+            <select name="sort" id="sortOrder">
                 <option value="ascending">昇順</option>
                 <option value="descending">降順</option>
             </select>
+            <button id="sortBtn" type="button">決定</button>
+            <!-- <button id="sortBtn" type="button">並べ替え</button> -->
         </div>
     </form>
     <div id="resultDisplay">
