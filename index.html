@@ -28,14 +28,14 @@
     <h1 class="title">Better Syllabus for SFC</h1>
     <p>このページは、SFCのシラバスをより見やすく、検索しやすくしたページです。</p>
     <p>ご意見・ご感想・ご要望・ご所望・ご期待・ご希望・ ご提案・ご意向・ご指摘 ・ご協力 ・ご依頼などは<a href="https://forms.gle/HxYLTkquxzozsv3UA">こちらのGoogle フォーム</a>まで。</p>
-    <form action="" id="form" class="form">
+    <form action="" id="form" class="form round-space">
         <div id="keywordSearch" class="search">
             <label for="keyword">キーワード</label>
             <input type="text" id="searchKeyword" class="search-text round-box" name="keyword">
             <button id="searchBtn" class="search-btn round-box" type="button">検索</button>
         </div>
         <!-- 追加の検索条件 (トグルで隠せるように) -->
-        <details>
+        <details class="round-box">
             <summary class="round-box">追加の検索条件</summary>
             <div id="additionalConditions" class="condition">
                 <h3 class="condition-group">曜日</h3>
@@ -74,7 +74,7 @@
                 <input type="checkbox" id="design" name="field" value="design">
             </div>
         </details>
-        <details>
+        <details class="round-box">
             <summary class="round-box">表示項目</summary>
             <div id="displayConditions" class="condition">
                 <input type="checkbox" id="day" name="display" value="day">
@@ -101,7 +101,7 @@
             <!-- <button id="sortBtn" type="button">並べ替え</button> -->
         </div>
     </form>
-    <div id="resultDisplay">
+    <div id="resultDisplay" class="round-space">
         <!-- 検索結果 -->
     </div>
 
