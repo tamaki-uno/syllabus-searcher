@@ -211,7 +211,7 @@ class CourseTile {
 async function main() {
     // htmlの要素を取得
     const FORM = document.getElementById('form'); // form要素
-    const ADDITIONAL_CONDITIONS = document.getElementById('additional-conditions'); // 追加の条件のdiv
+    const ADDITIONAL_CONDITIONS = document.getElementById('additionalConditions'); // 追加の条件のdiv
     const SORT = document.getElementById('sort'); // ソートのdiv
     const SEARCH_BTN = document.getElementById('searchBtn'); // 検索ボタン
     const SORT_BTN = document.getElementById('sortBtn'); // ソートボタン
