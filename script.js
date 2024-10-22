@@ -1,9 +1,17 @@
 'use strict';
 
-// htmlの要素を取得
-const searchBtn = document.getElementById('searchBtn'); // 検索ボタン
-const form = document.getElementById('form'); // form要素
-const resultDisplay = document.getElementById('resultDisplay');   // 結果を表示する場所
+
+/*
+JavaScriptの変数名の命名規則
+node.jsのスタイルガイド：https://github.com/felixge/node-style-guide#use-lowercamelcase-for-variables-properties-and-function-names
+Google JavaScript Style Guide：https://google.github.io/styleguide/jsguide.html#naming-method-names
+
+- 変数、プロパティ、関数名、メソッド名はローワーキャメルケースで記述する （例: myVariable）
+- 定数は全て大文字で記述し、単語の区切りにアンダースコアを使用する （例: MY_CONSTANT）
+- クラス名はアッパーキャメルケース（パスカルケース）で記述する （例: MyClass）
+*/
+
+
 
 // jsonファイルを読み込む関数
 async function fetchJson(url) {
