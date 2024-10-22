@@ -102,6 +102,109 @@ function dispaly_results(results) {
     }
 }
 
+// 検索結果のクラス
+class SearchResult {
+    // コンストラクタ
+    constructor() {
+        this.resultDisplay = document.getElementById('resultDisplay'); // 結果を表示する場所 (div要素)
+        this.results = []; // 検索結果 json
+        this.tiles = []; // 検索結果 CourseTile
+    }
+    // 検索結果を表示するメソッド
+    dispalyResults() {
+        console.log('dispalyResults');
+        this.resultDisplay.innerHTML = ''; // 表示をリセット
+        for (const result of this.results) {
+            let tile = new CourseTile(result); // タイルを作成
+            this.tiles.push(tile); // タイルを配列に追加
+            this.resultDisplay.appendChild(tile); // タイルを表示
+        }
+    }
+    // 検索結果をセットするメソッド
+    setResults(results) {
+        console.log('setResults');
+        this.results = results;
+        this.sortTiles();
+    }
+    // タイルを並べ替えるメソッド
+    sortTiles(sortType='科目名', sortOrder='ascending') {
+        console.log('sortTiles');
+        this.results.sort((a, b) => {
+            // 並べ替えの条件によって比較
+            if (sortOrder === 'ascending') {
+                return a.courseData[sortType] - b.courseData[sortType];
+            } else {
+                return b.courseData[sortType] - a.courseData[sortType];
+            }
+        });
+        this.dispalyResults(); // タイルを表示
+    }
+}
+
+class CourseTile {
+    constructor(courseData) {
+        this.courseData = courseData;
+        this.tile = this.createTile(courseData);
+    }
+    // タイルのdiv要素を作成するメソッド
+    createTile(courseData, properties) {
+        // 要素を作成
+        this.tile = document.createElement('div'); // タイルのdiv要素
+        const h2 = document.createElement('h2'); // h2要素を作成
+        const a = document.createElement('a'); // a要素を作成
+        const table = document.createElement('table'); // table要素を作成
+        const h3 = document.createElement('h3'); // h3要素を作成
+        const p = document.createElement('p'); // p要素を作成
+        // 属性を追加
+        this.div.className = 'tile'; // div要素にクラスを追加
+        h2.className = 'course-name'; // h2要素にクラスを追加
+        a.className = 'inherit'; // a要素にクラスを追加
+        a.target = '_blank'; // a要素にtargetを追加 (新しいタブで開く)
+        a.rel = 'noopener noreferrer'; // a要素にrelを追加 (セキュリティ対策)
+        table.className = 'course-info'; // table要素にクラスを追加
+        h3.className = 'course-description-title'; // h3要素にクラスを追加
+        p.className = 'course-description'; // p要素にクラスを追加
+        // courseDataのkeyを取り出し、それぞれを要素に追加
+        for (const key in courseData) {
+            switch (key) {
+                case 'URL':
+                    console.log('URL', result[key]);
+                    div.href = result[key]; // div要素にリンクを追加
+                    h2.href = result[key]; // h2要素にリンクを追加
+                    a.href = result[key]; // a要素にリンクを追加
+                    break;
+                case '科目名':
+                    a.textContent = result[key]; // a要素に科目名を追加
+                    h2.appendChild(a); // h2にaを追加
+                    break;
+                case '講義概要':
+                    h3.textContent = '講義概要'; // h3要素にタイトルを追加
+                    p.innerHTML = result[key].replace(/\n/g, '<br>'); // p要素に講義概要を追加 (改行をbrに変換)
+                    break;
+                default:
+                    const tr = document.createElement('tr'); // tr要素を作成 (table row)
+                    const th = document.createElement('th'); // th要素を作成 (table header)
+                    const td = document.createElement('td'); // td要素を作成 (table data)
+
+                    th.textContent = key; // th要素にkeyを追加
+                    td.textContent = result[key]; // td要素にresult[key]を追加
+                    tr.appendChild(th); // trにthを追加
+                    tr.appendChild(td); // trにtdを追加
+                    table.appendChild(tr); // tableにtrを追加
+                    break;
+            }
+        }
+        // 要素を追加
+        this.div.appendChild(h2); // divにh2を追加
+        this.div.appendChild(table); // divにtableを追加
+        this.div.appendChild(h3); // divにh3を追加
+        this.div.appendChild(p); // divにpを追加
+        return this.div;
+    }
+
+
+}
+
 // メイン関数
 async function main() {
     // htmlの要素を取得
