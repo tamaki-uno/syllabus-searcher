@@ -231,6 +231,7 @@ async function main() {
         RESULT_DISPLAY.innerHTML = ''; // 表示をリセット
         // フォームの値を取得 (キーワード、曜日、時限、分野をそれぞれ配列で取得)
         const KEYWORD = FORM.keyword.value; // キーワードを取得
+        // 
         const DAYS = Array.from(
             ADDITIONAL_CONDITIONS.querySelectorAll('input[name="day"]:checked')
         ).map(input => input.value); // dayの値を取得
@@ -240,7 +241,6 @@ async function main() {
         const FIELDS = Array.from(ADDITIONAL_CONDITIONS.querySelectorAll('input[name="field"]:checked')).map(input => input.value); // fieldの値を取得
         // 検索と表示
         const RESULTS = await searchCourse(DATA, KEYWORD, DAYS, TIMES, FIELDS); // 検索
-        // dispalyResults(RESULTS); // 結果を表示
         RESULT_DISPLAY.setResults(RESULTS); // 結果をセット
         RESULT_DISPLAY.dispalyResults(); // 結果を表示
     });
