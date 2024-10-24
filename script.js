@@ -44,6 +44,22 @@ async function searchCourse(data, keyword, days, times, fields) {
     return results;
 }
 
+// フィルターの関数
+function filterCourse(data, filter) {
+    console.log(`filterCourse: filter: ${filter}`);
+    // フィルター
+    // それぞれのフィルター条件はor検索　フィルター同士はand検索
+    const results = data.filter(item => {
+        for (const key in filter) { // フィルターのkeyを取り出す
+            if (!filter[key].includes(item[key])) { // フィルターのkeyにitem[key]が含まれていない場合 value deha?
+                return false;
+            }
+        }
+        return true; // すべての条件を満たす場合
+    });
+    return results;
+}
+
 // 結果を表示する関数
 function dispalyResults(results) {
     for (const result of results) {
