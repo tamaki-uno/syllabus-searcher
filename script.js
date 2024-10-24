@@ -24,11 +24,11 @@ async function fetchJson(url) {
 }
 
 // 検索の関数
-async function searchCourse(data, keyword, days, times, fields) {
-    console.log(`serachCourse: keyword: ${keyword}, days: ${days}, times: ${times}, fields: ${fields}`);
+async function searchCourse(data, keyword, filter) {
+    console.log(`serachCourse: keyword: ${keyword}, filter: ${filter}`);
     
     // 検索結果を格納する配列
-    const results = [];
+    // const results = [];
     // // jsonファイルのデータを一つずつ取り出す
     // for (const item of data) {
     //     // 検索条件に合致するかを判定
@@ -36,10 +36,20 @@ async function searchCourse(data, keyword, days, times, fields) {
     //         results.push(item); // 配列に追加
     //     }
     // }
-    results.push(`keyword: ${keyword}`);
-    results.push(`days: ${days}`);
-    results.push(`times: ${times}`);
-    results.push(`fields: ${fields}`);
+    const filteredData = filterCourse(data, filter);
+    const results = filteredData.filter(item => {
+        // keywordがitemに含まれているかを判定
+        if (item.includes(keyword)) {
+            return true;
+        }
+        if (item['科目名'].includes(keyword)) {
+            return true;
+        }
+        if (item['講義概要'].includes(keyword)) {
+            return true;
+        }
+        return false;
+    });
 
     return results;
 }
