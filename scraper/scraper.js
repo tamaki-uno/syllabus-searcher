@@ -20,21 +20,27 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
         for (const selector in selectors) {
             // if (!selectors.hasOwnProperty(selector)) continue; // セレクターが存在しない場合はスキップ
             if ($(selectors[selector]).length === 0) continue; // セレクターが存在しない場合はスキップ
-            const nodes = $(selectors[selector]); // セレクターで要素を取得
+            const node = $(selectors[selector]); // セレクターで要素を取得
             // ほしい情報の種類ごとに情報を取得
             switch (type) {
                 case 'text':
-                    data[selector] = nodes.text(); // テキストを取得してdataオブジェクトにセレクター名をキーにして保存
+                    data[selector] = node.text(); // テキストを取得してdataオブジェクトにセレクター名をキーにして保存
                     break;
                 case 'url':
-                    data[selector] = nodes.attr('href'); // URLを取得してdataオブジェクトにセレクター名をキーにして保存
+                    data[selector] = node.attr('href'); // URLを取得してdataオブジェクトにセレクター名をキーにして保存
                     break;
                 case 'html':
-                    data[selector] = nodes.html(); // HTMLを取得してdataオブジェクトにセレクター名をキーにして保存
+                    data[selector] = node.html(); // HTMLを取得してdataオブジェクトにセレクター名をキーにして保存
                     break;
                 case 'node':
-                    data[selector] = nodes; // ノードを取得してdataオブジェクトにセレクター名をキーにして保存
+                    data[selector] = node; // ノードを取得してdataオブジェクトにセレクター名をキーにして保存
                     break;
+                case  'both':
+                    const keyNode = $(selector);
+                    const key = keyNode.text();
+                    const valueNode = node;
+                    const value = valueNode.text();
+                    data[key] = value;
                 default:
                     console.error('Invalid type <scrape()>');
                     break;
@@ -130,7 +136,9 @@ async function scrapePagesToGetUrls(pageNums, title='', year='', semester='', su
     const urls = [];
     for (const key in urlsObj) {
         if (Object.prototype.hasOwnProperty.call(urlsObj, key)) {
-            urls.push(HOST_URL + urlsObj[key]);
+            const url = HOST_URL + urlsObj[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
+            urls.push(url + '?locale=ja'); // URLを配列に追加 (日本語)
+            urls.push(url + '?locale=en'); // URLを配列に追加 (英語)
         }
     }
     // console.log('@got urls', urls);
@@ -146,8 +154,8 @@ async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_seme
     const urls = await scrapePagesToGetUrls(pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles);
     
     // セレクタを定義
-    // const selecterKyoutsuuBubun = 'body > div.main > div > ';
-    // const selecterKyoutsuuBubun2 = 'body > div.main > div > div:nth-child(2) > div.class-info > div > ';
+    const selecterKB = 'body > div.main > div > ';
+    const selecterKB2 = 'body > div.main > div > div:nth-child(2) > div.class-info > div > ';
     const selectors = {
         '科目名': 'body > div.main > div > h2 > span.title',
         // 以下2列ゾーン
@@ -171,10 +179,20 @@ async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_seme
         // 以下詳細
         '講義概要': 'body > div.main > div > div:nth-child(3) > dl > dd > p'
     };
+    // const selectors = {
+    //     'body > div.main > div > h2 > span.title-label': 'body > div.main > div > h2 > span.title', // 科目名
+    //     // `${selecterKB}h2 > span.title-label`: `${selecterKB}h2 > span.title`,
+
+    //     'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(1)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(2)', // 学部・研究科
+    //     'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(3)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(4)', // 登録番号
+
+    // };
+
 
     // スクレイピングの実行
     // const data = await scrapePages(urls, selectors, 'text', true, 'array', true);
     const data = await scrapePages(urls, selectors, 'text', false, 'array', true);
+    // const data = await scrapePages(urls, selectors, 'both', false, 'array', true);
 
     return data;
 }
