@@ -156,37 +156,37 @@ async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_seme
     // セレクタを定義
     const selecterKB = 'body > div.main > div > ';
     const selecterKB2 = 'body > div.main > div > div:nth-child(2) > div.class-info > div > ';
-    const selectors = {
-        '科目名': 'body > div.main > div > h2 > span.title',
-        // 以下2列ゾーン
-        '学部・研究科': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
-        '登録番号': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
-        '科目ソート': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(2) > dd:nth-child(2)',
-        // 'おそらく正式な科目名': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
-        '分野': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(3) > dd:nth-child(2)',
-        '単位': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(3) > dd:nth-child(4)',
-        '開講年度・学期': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(4) > dd:nth-child(2)',
-        'K-Number': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(4) > dd:nth-child(4)',
-        // 以下1列ゾーン
-        // '開講年度・学期': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(1) > dd',
-        '曜日・時限': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(2) > dd',
-        '授業教員名': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(3) > dd',
-        '実施形態': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(4) > dd',
-        '授業で使う言語': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(5) > dd',
-        '開講場所': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(6) > dd',
-        '授業形態': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(7) > dd',
-        'GIGAサティフィケート対象': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(8) > dd',
-        // 以下詳細
-        '講義概要': 'body > div.main > div > div:nth-child(3) > dl > dd > p'
-    };
     // const selectors = {
-    //     'body > div.main > div > h2 > span.title-label': 'body > div.main > div > h2 > span.title', // 科目名
-    //     // `${selecterKB}h2 > span.title-label`: `${selecterKB}h2 > span.title`,
-
-    //     'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(1)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(2)', // 学部・研究科
-    //     'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(3)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(4)', // 登録番号
-
+    //     '科目名': 'body > div.main > div > h2 > span.title',
+    //     // 以下2列ゾーン
+    //     '学部・研究科': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
+    //     '登録番号': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
+    //     '科目ソート': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(2) > dd:nth-child(2)',
+    //     // 'おそらく正式な科目名': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
+    //     '分野': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(3) > dd:nth-child(2)',
+    //     '単位': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(3) > dd:nth-child(4)',
+    //     '開講年度・学期': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(4) > dd:nth-child(2)',
+    //     'K-Number': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(4) > dd:nth-child(4)',
+    //     // 以下1列ゾーン
+    //     // '開講年度・学期': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(1) > dd',
+    //     '曜日・時限': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(2) > dd',
+    //     '授業教員名': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(3) > dd',
+    //     '実施形態': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(4) > dd',
+    //     '授業で使う言語': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(5) > dd',
+    //     '開講場所': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(6) > dd',
+    //     '授業形態': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(7) > dd',
+    //     'GIGAサティフィケート対象': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(8) > dd',
+    //     // 以下詳細
+    //     '講義概要': 'body > div.main > div > div:nth-child(3) > dl > dd > p'
     // };
+    const selectors = {
+        'body > div.main > div > h2 > span.title-label': 'body > div.main > div > h2 > span.title', // 科目名
+        // `${selecterKB}h2 > span.title-label`: `${selecterKB}h2 > span.title`, // 科目名
+
+        'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(1)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(2)', // 学部・研究科
+        'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(3)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(4)', // 登録番号
+
+    };
 
 
     // スクレイピングの実行
@@ -209,8 +209,45 @@ async function main(){
     // // process.argv[2]以降が引数
     // const pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles = process.argv.slice(2);
 
-    const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
-    fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
+    // const url = searchURIGenerator(10, '', '2024', 'fall');
+    const url = 'https://syllabus.sfc.keio.ac.jp/courses/2024_38384?locale=ja';
+    let result = await scrape(url, {body: 'body'}, 'text', false, false);
+    result = result['body'];
+    // result = result.replace('\n', '');
+    // result = result.replace('\t', '');
+    result = result.replaceAll(' \n', '');
+    result = result.replaceAll(' ', '');
+    // result = result.replace('　', '');
+    // result = result.replace('\r', '');
+    // result = result.replace('\r\n', '');
+    // let resultArray = result.split('\n');
+    // for (let i = 0; i < resultArray.length; i++) {
+    //     resultArray[i] = resultArray[i].replace(' ', '');
+    // }
+    // let resultArrayCode = resultArray.map((result) => {
+    //     // return result.charCodeAt(0);
+    //     // return ' ' in result;
+    //     return result.includes(' ') ? null : result;
+    // })
+    // for (let result in resultArray) {
+    //     if (resultArray[result] != '' || resultArray[result] != ' ' || resultArray[result] != '　' || resultArray[result] != '\r' || resultArray[result] != '\r\n'){
+    //         resultArray2.push(resultArray[result]);
+    //     }
+    // }
+
+    // let resultObj = {};
+
+    // for (let i = 0; i < resultArray.length; i++) {
+    //     resultObj[resultArrayCode[i]] = resultArray[i];
+    // }
+
+    console.log(result);
+    // console.log(resultArray);
+    // console.log(resultArrayCode);
+    // console.log(resultObj);
+
+    // const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
+    // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // console.log('data:', data);
     console.log('done'); // 完了メッセージ
 }
