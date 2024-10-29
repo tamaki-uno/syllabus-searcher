@@ -243,7 +243,7 @@ async function main(){
     // // process.argv[2]以降が引数
     // const pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles = process.argv.slice(2);
 
-    const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
+    // const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
     // const data = {
     //     'key': 'value',
     //     'key2': 'value2'
@@ -252,9 +252,20 @@ async function main(){
     // fs.writeFile()
     // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFileSync(filename, JSON.stringify(data, null, 4)); // ファイルに保存
-    fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
-        if (err) throw err;
-    }); // ファイルに保存
+    // fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
+    //     if (err) throw err;
+    // }); // ファイルに保存
+
+    const pageText = await scrape('https://syllabus.sfc.keio.ac.jp/courses/2024_46893?locale=ja', {body: 'body'}, 'text', false, false);
+    // console.log('pageText:', pageText['body']);
+    const splitedPageText = pageText['body'].split('\n');
+    const formatedSplitedPageText = [];
+    for (item of splitedPageText) {
+        formatedSplitedPageText.push(item.replaceAll('  ', ''));
+    }
+    // console.log('formatedSplitedPageText:', formatedSplitedPageText);
+    const deletedBlankFormatedSplitedPageText = formatedSplitedPageText.filter(item => (item !== '')&&(item !== ' '));
+    console.log('deletedBlankFormatedSplitedPageText:', deletedBlankFormatedSplitedPageText);
 
 
     console.log('done'); // 完了メッセージ
