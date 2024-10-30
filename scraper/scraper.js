@@ -222,29 +222,42 @@ async function main(){
 
 async function test(){
     const url = 'https://syllabus.sfc.keio.ac.jp/courses?locale=ja&page=15&search%5Byear%5D=2024';
-    const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
-    const type = 'html';
+    const selectors = {};
+    // const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
+    // const selectors = {result: 'body > div.main > div > div.right-column > div.result'} // セレクタを定義 (検索結果を取得するためのセレクタ)
+    // const selectors = {detailBtn: '.detail-btn'}
+    for (let i = 1; i <= 25; i++) {
+        // selectors[`a${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper > a`;
+        // selectors[`wrapper${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper`;
+        // selectors[`url${i}`] = `.detail-btn:nth-child(${i})`;
+        selectors[`url${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper > a`;
+    }
+    // body > div.main > div > div.right-column > div.result > ul > li:nth-child(1) > div.detail-btn-wrapper > a
+    // const type = 'html';
+    // const type = 'node';
+    const type = 'url';
     const save = false;
     const urlsave = false;
 
     const data = await scrape(url, selectors, type, save, urlsave); // スクレイピング実行
     const body = data['body'];
 
-    const urls = [];
-    let start = 0;
-    while (body.indexOf('href="', start) !== -1) {
-        const urlStart = body.indexOf('href="', start) + 6;
-        // console.log(`urlStart: ${urlStart}`);
-        const urlEnd = body.indexOf('"', urlStart);
-        const url = body.slice(urlStart, urlEnd);
-        urls.push(url);
-        start = urlEnd;
-    }
-    const jsDeletedUrls = urls.filter(url => url.indexOf('javascript') === -1);
+    // const urls = [];
+    // let start = 0;
+    // while (body.indexOf('href="', start) !== -1) {
+    //     const urlStart = body.indexOf('href="', start) + 6;
+    //     // console.log(`urlStart: ${urlStart}`);
+    //     const urlEnd = body.indexOf('"', urlStart);
+    //     const url = body.slice(urlStart, urlEnd);
+    //     urls.push(url);
+    //     start = urlEnd;
+    // }
+    // const jsDeletedUrls = urls.filter(url => url.indexOf('javascript') === -1);
     // const httpsUrls = urls.filter(url => url.indexOf('https') !== -1);
     
+    console.log(data);
     // console.log(urls);
-    console.log(jsDeletedUrls);
+    // console.log(jsDeletedUrls);
     // console.log(httpsUrls);
 }
 
