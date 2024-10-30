@@ -170,10 +170,11 @@ async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_seme
         if (data['body'] === undefined) return 'couldnt find body from:'+data[URL] ; // データが取得できなかった場合はスキップ
         const shapedData = data['body'].replaceAll('  ', ''); // 余分なスペースを削除
         const formatedData = shapedData.split('\n'); // 改行で分割
+        const blanklessData = formatedData.filter((value) => value !== ''); // 空白行を削除
         // console.log('formatedData:', formatedData);
         const resultArray = [
             data['URL'],
-            formatedData
+            blanklessData,
         ]; // 結果の配列を作成、URLと本文を格納
 
         results.push(resultArray); // 結果を配列に追加
