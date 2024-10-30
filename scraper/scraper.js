@@ -157,68 +157,26 @@ async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_seme
     // const pageNums = 10; // ページ数
     // 条件に合う詳細ページのURLを取得
     const urls = await scrapePagesToGetUrls(pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles);
-    
-    // セレクタを定義
-    const selecterKB = 'body > div.main > div > ';
-    const selecterKB2 = 'body > div.main > div > div:nth-child(2) > div.class-info > div > ';
-    // const selectors = {
-    //     '科目名': 'body > div.main > div > h2 > span.title',
-    //     // 以下2列ゾーン
-    //     '学部・研究科': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
-    //     '登録番号': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
-    //     '科目ソート': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(2) > dd:nth-child(2)',
-    //     // 'おそらく正式な科目名': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
-    //     '分野': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(3) > dd:nth-child(2)',
-    //     '単位': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(3) > dd:nth-child(4)',
-    //     '開講年度・学期': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(4) > dd:nth-child(2)',
-    //     'K-Number': 'body > div.main > div > div:nth-child(2) > div.class-info > div > dl:nth-child(4) > dd:nth-child(4)',
-    //     // 以下1列ゾーン
-    //     // '開講年度・学期': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(1) > dd',
-    //     '曜日・時限': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(2) > dd',
-    //     '授業教員名': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(3) > dd',
-    //     '実施形態': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(4) > dd',
-    //     '授業で使う言語': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(5) > dd',
-    //     '開講場所': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(6) > dd',
-    //     '授業形態': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(7) > dd',
-    //     'GIGAサティフィケート対象': 'body > div.main > div > div:nth-child(2) > div.syllabus-info > dl:nth-child(8) > dd',
-    //     // 以下詳細
-    //     '講義概要': 'body > div.main > div > div:nth-child(3) > dl > dd > p'
-    // };
 
-    // const selectors = {
-    //     'body > div.main > div > h2 > span.title-label': 'body > div.main > div > h2 > span.title', // 科目名
-    //     // `${selecterKB}h2 > span.title-label`: `${selecterKB}h2 > span.title`, // 科目名
-
-    //     'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(1)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(2)', // 学部・研究科
-    //     'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dt:nth-child(3)': 'body > div.main > div > div:nth-child(2) > div.class-info > div:nth-child(1) > dl:nth-child(1) > dd:nth-child(4)', // 登録番号
-
-    // };
-
+    const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
 
     // スクレイピングの実行
-    // const data = await scrapePages(urls, selectors, 'text', true, 'array', true);
     
-    const selectors = {body: 'body'};
     const dataArray = await scrapePages(urls, selectors, 'text', false, 'array', true);
-    // console.log('data:', data);
+
     const results = [];
     for (data of dataArray) {
         // console.log('data:', data);
         if (data['body'] === undefined) return 'couldnt find body from:'+data[URL] ; // データが取得できなかった場合はスキップ
-        
-        const shapedData = data['body'].replaceAll(' \n', '').replaceAll('  ', ''); // 余分な改行とスペースを削除
+        const shapedData = data['body'].replaceAll('  ', ''); // 余分なスペースを削除
         const formatedData = shapedData.split('\n'); // 改行で分割
         // console.log('formatedData:', formatedData);
-        const result = {
-            'URL': data['URL'], // URL
-            '科目名': formatedData[8].replace('科目名', '').replace('Subject', '') // 科目名
-        };
-        for (let i = 9; i < formatedData.length; i += 2) {
-            result[formatedData[i]] = formatedData[i + 1]; // その他項目
-        }
-        // const data = await scrapePages(urls, selectors, 'both', false, 'array', true);
-        // console.log('result:', result);
-        results.push(result);
+        const resultArray = [
+            data['URL'],
+            formatedData
+        ]; // 結果の配列を作成、URLと本文を格納
+
+        results.push(resultArray); // 結果を配列に追加
     }
     console.log(`scraped ${results.length} courses`);
     // return data;
