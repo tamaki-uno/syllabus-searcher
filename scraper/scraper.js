@@ -256,17 +256,34 @@ async function main(){
     //     if (err) throw err;
     // }); // ファイルに保存
 
-    const pageText = await scrape('https://syllabus.sfc.keio.ac.jp/courses/2024_46893?locale=ja', {body: 'body'}, 'text', false, false);
+    const urls = [
+        'https://syllabus.sfc.keio.ac.jp/courses/2024_46893?locale=ja',
+        'https://syllabus.sfc.keio.ac.jp/courses/2024_46893?locale=en'
+    ]
+
+    for (const url of urls) {
+    const pageText = await scrape(url, {body: 'body'}, 'text', false, false);
     // console.log('pageText:', pageText['body']);
-    const splitedPageText = pageText['body'].split('\n');
-    const formatedSplitedPageText = [];
-    for (item of splitedPageText) {
-        formatedSplitedPageText.push(item.replaceAll('  ', ''));
-    }
+
+    // const splitedPageText = pageText['body'].split('\n');
+    // const formatedSplitedPageText = [];
+    // for (item of splitedPageText) {
+    //     formatedSplitedPageText.push(item.replaceAll('  ', ''));
+    // }
+
+    const shapedPageText = pageText['body'].replaceAll('  ', ''); // 余分なスペースを削除
+    // const shapedPageText = pageText['body'].replaceAll(' \n', '').replaceAll('  ', ''); // 余分な改行とスペースを削除
+    const formatedSplitedPageText = shapedPageText.split('\n'); // 改行で分割
+
     // console.log('formatedSplitedPageText:', formatedSplitedPageText);
     const deletedBlankFormatedSplitedPageText = formatedSplitedPageText.filter(item => (item !== '')&&(item !== ' '));
-    console.log('deletedBlankFormatedSplitedPageText:', deletedBlankFormatedSplitedPageText);
-
+    // console.log('deletedBlankFormatedSplitedPageText:', deletedBlankFormatedSplitedPageText);
+    result = '';
+    for (let i = 0; i < deletedBlankFormatedSplitedPageText.length; i++) {
+        result += `${i}: ${deletedBlankFormatedSplitedPageText[i]},\n`;
+    }
+    console.log('result:\n', result);
+    }
 
     console.log('done'); // 完了メッセージ
 }
