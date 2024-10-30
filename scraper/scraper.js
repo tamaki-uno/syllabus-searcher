@@ -207,7 +207,8 @@ async function main(){
     const bom = '\uFEFF'; // BOM (Byte Order Mark) UTF-8の場合は'\uFEFF'を先頭につけることでExcelで開いたときに文字化けを防ぐことができる
     const mimetype = 'text/csv'; // MIMEタイプ
     const charset = 'utf-8'; // 文字コード
-    const csvContent = `${bom}data:${mimetype};charset=${charset},` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
+    const header = 'absent' // ヘッダーの有無 (ある場合は'present'、ない場合は'absent')
+    const csvContent = `data:${mimetype};charset=${charset};header=${header}${bom}` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
 
     // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFileSync(filename, JSON.stringify(data, null, 4)); // ファイルに保存
