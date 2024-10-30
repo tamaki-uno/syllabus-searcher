@@ -192,7 +192,6 @@ async function main(){
     const semester = 'fall';
 
     const now = new Date(); // 現在時刻を取得
-    // const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}.json`; // ファイル名 (data_年/月/日_時:分:秒.json)
     const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`; // ファイル名 (data_年/月/日_時:分:秒.json)
     console.log('filename:', filename); // ファイル名を表示
 
@@ -201,47 +200,13 @@ async function main(){
     // // process.argv[2]以降が引数
     // const pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles = process.argv.slice(2);
 
-    // const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
-    // const data = {
-    //     'key': 'value',
-    //     'key2': 'value2'
-    // }
-    // console.log('data:', data);
-    // fs.writeFile()
+    const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
+
     // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFileSync(filename, JSON.stringify(data, null, 4)); // ファイルに保存
-    // fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
-    //     if (err) throw err;
-    // }); // ファイルに保存
-
-    const urls = [
-        'https://syllabus.sfc.keio.ac.jp/courses/2024_46893?locale=ja',
-        'https://syllabus.sfc.keio.ac.jp/courses/2024_46893?locale=en'
-    ]
-
-    for (const url of urls) {
-    const pageText = await scrape(url, {body: 'body'}, 'text', false, false);
-    // console.log('pageText:', pageText['body']);
-
-    // const splitedPageText = pageText['body'].split('\n');
-    // const formatedSplitedPageText = [];
-    // for (item of splitedPageText) {
-    //     formatedSplitedPageText.push(item.replaceAll('  ', ''));
-    // }
-
-    const shapedPageText = pageText['body'].replaceAll('  ', ''); // 余分なスペースを削除
-    // const shapedPageText = pageText['body'].replaceAll(' \n', '').replaceAll('  ', ''); // 余分な改行とスペースを削除
-    const formatedSplitedPageText = shapedPageText.split('\n'); // 改行で分割
-
-    // console.log('formatedSplitedPageText:', formatedSplitedPageText);
-    const deletedBlankFormatedSplitedPageText = formatedSplitedPageText.filter(item => (item !== '')&&(item !== ' '));
-    // console.log('deletedBlankFormatedSplitedPageText:', deletedBlankFormatedSplitedPageText);
-    result = '';
-    for (let i = 0; i < deletedBlankFormatedSplitedPageText.length; i++) {
-        result += `${i}: ${deletedBlankFormatedSplitedPageText[i]},\n`;
-    }
-    console.log('result:\n', result);
-    }
+    fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
+        if (err) throw err;
+    }); // ファイルに保存
 
     console.log('done'); // 完了メッセージ
 }
