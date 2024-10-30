@@ -193,7 +193,8 @@ async function main(){
     const semester = 'fall';
 
     const now = new Date(); // 現在時刻を取得
-    const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`; // ファイル名 (data_年/月/日_時:分:秒.json)
+    // const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`; // ファイル名 (data_年/月/日_時:分:秒.json)
+    const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${pageNums}_${title}_${year}_${semester}.csv`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.csv)
     console.log('filename:', filename); // ファイル名を表示
 
     // // 引数から取得
@@ -203,11 +204,17 @@ async function main(){
 
     const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
 
+    const bom = '\uFEFF'; // BOM (Byte Order Mark) UTF-8の場合は'\uFEFF'を先頭につけることでExcelで開いたときに文字化けを防ぐことができる
+    const mimetype = 'text/csv'; // MIMEタイプ
+    const charset = 'utf-8'; // 文字コード
+    const csvContent = `${bom}data:${mimetype};charset=${charset},` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
+
     // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFileSync(filename, JSON.stringify(data, null, 4)); // ファイルに保存
-    fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
-        if (err) throw err;
-    }); // ファイルに保存
+    // fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
+    //     if (err) throw err;
+    // }); // ファイルに保存
+    fs.writeFileSync(filename, csvContent); // ファイルに保存
 
     console.log('done'); // 完了メッセージ
 }
