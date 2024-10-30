@@ -220,4 +220,34 @@ async function main(){
     console.log('done'); // 完了メッセージ
 }
 
-main();
+async function test(){
+    const url = 'https://syllabus.sfc.keio.ac.jp/courses?locale=ja&page=15&search%5Byear%5D=2024';
+    const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
+    const type = 'html';
+    const save = false;
+    const urlsave = false;
+
+    const data = await scrape(url, selectors, type, save, urlsave); // スクレイピング実行
+    const body = data['body'];
+
+    const urls = [];
+    let start = 0;
+    while (body.indexOf('href="', start) !== -1) {
+        const urlStart = body.indexOf('href="', start) + 6;
+        // console.log(`urlStart: ${urlStart}`);
+        const urlEnd = body.indexOf('"', urlStart);
+        const url = body.slice(urlStart, urlEnd);
+        urls.push(url);
+        start = urlEnd;
+    }
+    const jsDeletedUrls = urls.filter(url => url.indexOf('javascript') === -1);
+    // const httpsUrls = urls.filter(url => url.indexOf('https') !== -1);
+    
+    // console.log(urls);
+    console.log(jsDeletedUrls);
+    // console.log(httpsUrls);
+}
+
+// main();
+
+test();
