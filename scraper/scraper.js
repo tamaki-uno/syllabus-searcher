@@ -144,7 +144,7 @@ async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester
     }
 
     // スクレイピング実行
-    const urlsObj = await scrapePages(searchURLs, selectors, 'url', false, 'connect', false);
+    const urlsObjArray = await scrapePages(searchURLs, selectors, 'url', false, 'array', false);
 
     // console.log('@got urlsObj', urlsObjArray);
     // URLの配列を作成
