@@ -59,9 +59,9 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
 
 // 複数のURLをスクレイピングする関数
 async function scrapePages(urls, selectors, type='text', save=false, form='connect', urlsave=false) {
-    console.log(`#scrape pages. estimated time: ${urls.length}sec`);
-    let timeRemain = urls.length;
-    let datas;
+    let timeRemain = urls.length; // 残り時間を初期化
+    console.log(`#scrape pages. estimated time: ${timeRemain}sec`); // 残り時間を表示
+    let datas; // データを格納する変数を初期化
     switch (form) {
         case 'connect':
             datas = {}; // データを格納するオブジェクトを初期化
