@@ -121,30 +121,35 @@ function searchURIGenerator(page='', title='', year='', semester='', sub_semeste
 }
 
 // 複数の検索結果ページをスクレイピングしてURLを取得する関数
-async function scrapePagesToGetUrls(pageNums, title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
-    const maximumExecutionTime = pageNums + 25 * pageNums; // 最大実行時間 (検索結果ページ数 + 1ページあたりのURLの最大数 * 検索結果ページ数)
-    const maxEstHour = Math.floor(maximumExecutionTime / 3600); // 最大実行時間の時間部分
-    const maxEstMin = Math.floor((maximumExecutionTime % 3600) / 60); // 最大実行時間の分部分
-    const maxEstSec = maximumExecutionTime % 60; // 最大実行時間の秒部分
-    console.log(`#scrape page to get urls. this may take maximum ${maxEstHour}h ${maxEstMin}m ${maxEstSec}s`); // 最大実行時間を表示
+async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
+
+
+    const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
+    const firstPageSelector = {last: 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'}; // セレクタを定義 (最終ページを取得するためのセレクタ)
+    const lastPageURL = await scrape(searchFirstURL, firstPageSelector, 'url', false, false); // 最終ページのURLを取得
+    const lastPageNum = lastPageURL['last'].split('page=')[1].split('&')[0]; // 最終ページ番号を取得
+    const PAGE_NUM = Number(lastPageNum); // 最終ページ番号を数値に変換
+
+    console.log(`#scrape page to get urls. ${PAGE_NUM}pages matched to your search criteria.`); // ページ数を表示
 
     const searchURLs = [];
     // ページ数分のURLを生成
-    for (let page = 1; page <= pageNums; page++) {
+    for (let page = 1; page <= PAGE_NUM; page++) {
         searchURLs.push(searchURIGenerator(page, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles));
     }
     // セレクタを定義 (URLを取得するためのセレクタ)
-    // const selectors = {}
-    // for (let i = 1; i <= 25; i++) {
-    //     selectors[`url${i}`] = `body > div.main > div > div.right-column > div.result > ul > li:nth-child(${i}) > div.detail-btn-wrapper > a`;
-    // }
-    const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
+    const selectors = {};
+    for (let i = 1; i <= 25; i++) {
+        selectors[`url${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper > a`;
+    }
+
     // スクレイピング実行
     const urlsObj = await scrapePages(searchURLs, selectors, 'url', false, 'connect', false);
 
-    // console.log('@got urlsObj', urlsObj);
+    // console.log('@got urlsObj', urlsObjArray);
     // URLの配列を作成
     const urls = [];
+    for (const urlsObj of urlsObjArray) {
     for (const key in urlsObj) {
         if (Object.prototype.hasOwnProperty.call(urlsObj, key)) {
             const url = HOST_URL + urlsObj[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
@@ -152,7 +157,9 @@ async function scrapePagesToGetUrls(pageNums, title='', year='', semester='', su
             urls.push(url + '?locale=en'); // URLを配列に追加 (英語)
         }
     }
-    // console.log('@got urls', urls);
+    }
+    
+    console.log(`@got ${urls.length} urls`);
 
     return urls;
 }
