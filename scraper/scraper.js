@@ -122,17 +122,23 @@ function searchURIGenerator(page='', title='', year='', semester='', sub_semeste
 
 // 複数の検索結果ページをスクレイピングしてURLを取得する関数
 async function scrapePagesToGetUrls(pageNums, title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
-    console.log(`#scrape page to get urls. this may take maximum ${pageNums*25}secs.`);
+    const maximumExecutionTime = pageNums + 25 * pageNums; // 最大実行時間 (検索結果ページ数 + 1ページあたりのURLの最大数 * 検索結果ページ数)
+    const maxEstHour = Math.floor(maximumExecutionTime / 3600); // 最大実行時間の時間部分
+    const maxEstMin = Math.floor((maximumExecutionTime % 3600) / 60); // 最大実行時間の分部分
+    const maxEstSec = maximumExecutionTime % 60; // 最大実行時間の秒部分
+    console.log(`#scrape page to get urls. this may take maximum ${maxEstHour}h ${maxEstMin}m ${maxEstSec}s`); // 最大実行時間を表示
+
     const searchURLs = [];
     // ページ数分のURLを生成
     for (let page = 1; page <= pageNums; page++) {
         searchURLs.push(searchURIGenerator(page, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles));
     }
     // セレクタを定義 (URLを取得するためのセレクタ)
-    const selectors = {}
-    for (let i = 1; i <= 25; i++) {
-        selectors[`url${i}`] = `body > div.main > div > div.right-column > div.result > ul > li:nth-child(${i}) > div.detail-btn-wrapper > a`;
-    }
+    // const selectors = {}
+    // for (let i = 1; i <= 25; i++) {
+    //     selectors[`url${i}`] = `body > div.main > div > div.right-column > div.result > ul > li:nth-child(${i}) > div.detail-btn-wrapper > a`;
+    // }
+    const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
     // スクレイピング実行
     const urlsObj = await scrapePages(searchURLs, selectors, 'url', false, 'connect', false);
 
@@ -187,15 +193,16 @@ async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_seme
 // メイン関数
 async function main(){
     console.log('start'); // 開始メッセージ
-    const pageNums = 100;
+    // const pageNums = 56;　// 2024年度　秋学期は56ページ
+    const pageNums = 108; // 2024年度　春学期・秋学期を合わせて108ページ
     const title = '';
     const year = '2024';
-    const semester = 'fall';
+    const semester = '';
 
     const now = new Date(); // 現在時刻を取得
     // const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`; // ファイル名 (data_年/月/日_時:分:秒.json)
-    const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${pageNums}_${title}_${year}_${semester}.csv`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.csv)
-    console.log('filename:', filename); // ファイル名を表示
+    const filepath = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${pageNums}_${title}_${year}_${semester}.csv`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.csv)
+    console.log('filepath:', filepath); // ファイル名を表示
 
     // // 引数から取得
     // // process.argv[0]はNode.jsの実行プロセスのパス、process.argv[1]は実行したスクリプトファイルのパス
@@ -208,14 +215,14 @@ async function main(){
     const mimetype = 'text/csv'; // MIMEタイプ
     const charset = 'utf-8'; // 文字コード
     const header = 'absent' // ヘッダーの有無 (ある場合は'present'、ない場合は'absent')
-    const csvContent = `data:${mimetype};charset=${charset};header=${header}${bom}` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
+    const csvContent = `${bom}data:${mimetype};charset=${charset};header=${header}` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
 
     // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFileSync(filename, JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
     //     if (err) throw err;
     // }); // ファイルに保存
-    fs.writeFileSync(filename, csvContent); // ファイルに保存
+    fs.writeFileSync(filepath, csvContent); // ファイルに保存
 
     console.log('done'); // 完了メッセージ
 }
