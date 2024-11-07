@@ -123,11 +123,11 @@ function searchURIGenerator(page='', title='', year='', semester='', sub_semeste
 // 複数の検索結果ページをスクレイピングしてURLを取得する関数
 async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
 
-
     const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
     const firstPageSelector = {last: 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'}; // セレクタを定義 (最終ページを取得するためのセレクタ)
     const lastPageURL = await scrape(searchFirstURL, firstPageSelector, 'url', false, false); // 最終ページのURLを取得
     const lastPageNum = lastPageURL['last'].split('page=')[1].split('&')[0]; // 最終ページ番号を取得
+
     const PAGE_NUM = Number(lastPageNum); // 最終ページ番号を数値に変換
 
     console.log(`#scrape page to get urls. ${PAGE_NUM}pages matched to your search criteria.`); // ページ数を表示
