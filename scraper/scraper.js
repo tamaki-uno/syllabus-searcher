@@ -17,6 +17,27 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
         let data = {}; // データを格納するオブジェクトを初期化
         if (urlsave) data['URL'] = url; // URLを保存する場合はURLをdataオブジェクトに追加
 
+        if (type === 'object') {
+            const objArray = [];
+            for (let i = 0; i < selectors['num']; i++) {
+                const obj = {};
+                for (const key in selectors) {
+                    if (key === 'num') continue;  // numはスキップ
+                    const selector = selectors[key].replace('{num}', i+1); // セレクターの{num}をi+1に置換
+                    if ($(selector).length === 0) continue; // セレクターが存在しない場合はスキップ
+                    const node = $(selector); // セレクターで要素を取得
+                    if (key === 'URL') {
+                        obj[key] = HOST_URL + node.attr('href'); // URLを取得してdataオブジェクトにセレクター名をキーにして保存
+                    } else {
+                        obj[key] = node.text(); // テキストを取得してdataオブジェクトにセレクター名をキーにして保存
+                        // obj[key] = node.html(); // HTMLを取得してdataオブジェクトにセレクター名をキーにして保存
+                    }
+                }
+                objArray.push(obj); // オブジェクトを配列に追加
+            }
+            data = objArray;
+        } else {
+
         // Selectorで要素を取得
         for (const selector in selectors) {
             // if (!selectors.hasOwnProperty(selector)) continue; // セレクターが存在しない場合はスキップ
