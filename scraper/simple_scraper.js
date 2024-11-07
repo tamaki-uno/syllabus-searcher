@@ -39,7 +39,6 @@ async function scrape(url, selectors, num=1) {
 
 // 複数のURLをスクレイピングする関数
 async function scrapePages(urls, selectors, num=1) {
-    console.log('#scrape pages'); // 開始メッセージ
     let timeRemain = urls.length; // 残り時間を初期化
     estTimes = '';
     const execHour = Math.floor(timeRemain / 3600); // 実行時間の時間部分
@@ -53,7 +52,6 @@ async function scrapePages(urls, selectors, num=1) {
     for (const url of urls) {
         if (timeRemain % 10 === 0) console.log(`time remain: ${timeRemain}sec`); // 10秒ごとに残り時間を表示
         const data = await scrape(url, selectors, num); // スクレイピング実行
-        // datas = datas.concat(data); // データを結合
         datas.push(...data); // データを結合
         await new Promise(resolve => setTimeout(resolve, 1000)); // 1秒待機
         timeRemain--;
@@ -92,16 +90,13 @@ async function searchURIsGenerator(title='', year='', semester='', sub_semester=
     console.log('#search URIs generator'); // 開始メッセージ
     const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
     const firstPageSelector = {
-        // 'num': 1,
         'URL': 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'
-        // body > div.main > div > div.right-column > div.pager > nav > span.last > a
     }; // セレクタを定義 (最終ページを取得するためのセレクタ)
     const lastPageURLObjArray = await scrape(searchFirstURL, firstPageSelector); // 最終ページのURLを取得
     const lastPageURL = lastPageURLObjArray[0]['URL']; // 最終ページのURLを取得
     console.log('lastPageURL:', lastPageURL); // 最終ページのURLを表示
     let lastPageNum = 1; // ページ数を1に固定
     if (lastPageURL !== undefined) { // 最終ページが存在する場合
-        console.log('hi there!'); // ページ数を表示
         lastPageNum = lastPageURL.split('page=')[1].split('&')[0]; // 最終ページ番号を取得
     }
     const PAGE_NUM = Number(lastPageNum); // 最終ページ番号を数値に変換
@@ -145,7 +140,6 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
 
     // スクレイピング実行
     const dataArray = await scrapePages(searchURLs, selectors, searchURLs.length); // スクレイピング実行
-    // console.log('dataArray:', dataArray); // データを表示
     const nullDeletedDataArray = dataArray.filter((data) => data['Subject'] !== undefined); // Subjectが空のデータを削除 
     const results = nullDeletedDataArray.map((data) => {
         // 加工ゾーン
@@ -168,7 +162,6 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
                     }
                     break;
                 case 'Lecturer Name': // 教員名を分割
-                    // console.log(`Lecturer Name: ${data[key]}`);
                     data[key] = data[key].split(' \n').filter((name) => name !== ''); // 教員名を分割&空の要素を削除
                     break;
                 case 'URL': // URLを加工
@@ -177,7 +170,6 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
                 default:
                     break;
             }
-
         }
         return data;
     });
@@ -203,8 +195,8 @@ async function main(){
 
     const data = await scrapeSyllabusSimply(title, year, semester); // スクレイピング実行
 
-    // await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルに保存
-    console.log('data:', data); // データを表示
+    await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルに保存
+    // console.log('data:', data); // データを表示
 
     console.log('done'); // 完了メッセージ
 }
