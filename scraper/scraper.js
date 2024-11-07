@@ -42,6 +42,7 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
                     const valueNode = node;
                     const value = valueNode.text();
                     data[key] = value;
+                    break;
                 default:
                     console.error('Invalid type <scrape()>');
                     break;
