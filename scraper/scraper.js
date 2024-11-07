@@ -178,24 +178,57 @@ async function scrapeSyllabus(title='', year='', semester='', sub_semester='', t
     // 条件に合う詳細ページのURLを取得
     const urls = await scrapePagesToGetUrls(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles);
 
-    const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
+    // const maximumExecutionTime = urls.length; // 最大実行時間 (検索結果ページ数 + 1ページあたりのURLの最大数 * 検索結果ページ数)
+    // const maxEstHour = Math.floor(maximumExecutionTime / 3600); // 最大実行時間の時間部分
+    // const maxEstMin = Math.floor((maximumExecutionTime % 3600) / 60); // 最大実行時間の分部分
+    // const maxEstSec = maximumExecutionTime % 60; // 最大実行時間の秒部分
+    // console.log(`#scrape page to get urls. scrape ${urls.length}pages. this will take ${maxEstHour}h ${maxEstMin}m ${maxEstSec}s`); // 最大実行時間を表示
+    console.log(`#scrape syllabus. scrape ${urls.length} urls`); // URL数を表示
+
+    // const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
+
+    const selectors = {
+        Subject: 'div.main > div > h2 > span.title',
+        'Faculty/Graduate School': 'div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
+        'Course Registration Number': 'div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
+        'Subject Sort': 'div.class-info > div > dl:nth-child(2) > dd:nth-child(2)',
+        'Title': 'div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
+        'year/semester': 'div.class-info > div > dl:nth-child(4) > dd:nth-child(2)'
+    }
+
+    // uri += '?locale=ja'; // 言語
+    // if (page) (page === '1') ? uri += '' : uri += `&page=${page}`; // ページ番号 (1ページ目の場合は何も追加しない)
+    // if (title) uri += `&search[title]=${title}`; // タイトル
+    // if (year) uri += `&search[year]=${year}`; // 年度
+    // if (semester) uri += `&search[semester]=${semester}`; // 学期
+    // if (sub_semester) uri += `&search[sub_semester]=${sub_semester}`; // 前半/後半
+    // if (teacher_name) uri += `&search[teacher_name]=${teacher_name}`; // 教員名
+    // if (day_codes) uri += `&search[day_codes][]=${day_codes}`; // 曜日
+    // if (time_codes) uri += `&search[time_codes][]=${time_codes}`; // 時限
+    // if (departments) uri += `&search[departments][]=${departments}`; // 学部
+    // if (sfc_guide_title) uri += `&search[sfc_guide_title]=${sfc_guide_title}`; // SFCガイド
+    // if (languages) uri += `&search[languages][]=${languages}`; // 言語
+    // if (summary) uri += `&search[summary]=${summary}`; // 概要
+    // if (locations) uri += `&search[locations][]=${locations}`; // 場所
+    // if (styles) uri += `&search[styles][]=${styles}`; // スタイル
 
     // スクレイピングの実行
     
-    const dataArray = await scrapePages(urls, selectors, 'text', false, 'array', true);
+    // const dataArray = await scrapePages(urls, selectors, 'text', false, 'array', true);
+    const dataArray = await scrapePages(urls, selectors, 'html', false, 'array', true);
 
-    const results = [];
-    for (data of dataArray) {
-        // console.log('data:', data);
-        if (data['body'] === undefined) return 'couldnt find body from:'+data[URL] ; // データが取得できなかった場合はスキップ
-        const shapedData = data['body'].replaceAll('  ', ''); // 余分なスペースを削除
-        const formatedData = shapedData.split('\n'); // 改行で分割
-        const blanklessData = formatedData.filter((value) => value !== ''); // 空白行を削除
-        // console.log('formatedData:', formatedData);
-        const resultArray = [
-            data['URL'],
-            blanklessData,
-        ]; // 結果の配列を作成、URLと本文を格納
+    // const results = [];
+    // for (data of dataArray) {
+    //     // console.log('data:', data);
+    //     if (data['body'] === undefined) return 'couldnt find body from:'+data[URL] ; // データが取得できなかった場合はスキップ
+    //     const shapedData = data['body'].replaceAll('  ', ''); // 余分なスペースを削除
+    //     const formatedData = shapedData.split('\n'); // 改行で分割
+    //     const blanklessData = formatedData.filter((value) => value !== ''); // 空白行を削除
+    //     // console.log('formatedData:', formatedData);
+    //     const resultArray = [
+    //         data['URL'],
+    //         blanklessData,
+    //     ]; // 結果の配列を作成、URLと本文を格納
 
         results.push(resultArray); // 結果を配列に追加
     }
