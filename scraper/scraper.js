@@ -172,11 +172,11 @@ async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester
 }
 
 // シラバスのコース詳細ページをスクレイピングする関数
-async function scrapeSyllabus(pageNums, title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles='') {
+async function scrapeSyllabus(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles='') {
     console.log('#scrape syllabus');
     // const pageNums = 10; // ページ数
     // 条件に合う詳細ページのURLを取得
-    const urls = await scrapePagesToGetUrls(pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles);
+    const urls = await scrapePagesToGetUrls(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles);
 
     const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
 
