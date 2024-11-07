@@ -195,6 +195,93 @@ async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester
     return urls;
 }
 
+async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles='') {
+    console.log('#scrape syllabus simply');
+        
+    const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
+    const firstPageSelector = {last: 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'}; // セレクタを定義 (最終ページを取得するためのセレクタ)
+    const lastPageURL = await scrape(searchFirstURL, firstPageSelector, 'url', false, false); // 最終ページのURLを取得
+    let lastPageNum = 1; // ページ数を1に固定
+    if (lastPageURL['last'] !== undefined) {
+        lastPageNum = lastPageURL['last'].split('page=')[1].split('&')[0]; // 最終ページ番号を取得
+    }
+    const PAGE_NUM = Number(lastPageNum); // 最終ページ番号を数値に変換
+
+    console.log(`#scrape page to get urls. ${PAGE_NUM}pages matched to your search criteria.`); // ページ数を表示
+
+    const searchURLs = [];
+    // ページ数分のURLを生成
+    for (let page = 1; page <= PAGE_NUM; page++) {
+        searchURLs.push(searchURIGenerator(page, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles));
+    }
+    // セレクタを定義 (URLを取得するためのセレクタ)
+    const selectors = {
+        'num': 25,
+        'Subject': 'li:nth-child({num}) > h2',
+        'Faculty/Graduate School': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
+        'Course Registration Number': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
+        'Subject Sort': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(2) > dd:nth-child(2)',
+        'Field': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
+        'Units': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(3) > dd:nth-child(2)',
+        'K-Number': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(3) > dd:nth-child(4)',
+        'year/semester': 'li:nth-child({num}) > div.class-info > dl:nth-child(2) > dd',
+        'Lecturer Name': 'li:nth-child({num}) > div.class-info > dl:nth-child(3) > dd',
+        'Class Format': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(1) > dd',
+        'class Style': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(2) > dd',
+        'Day of Week・Period': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(3) > dd',
+        'Language': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(4) > dd',
+        'Research Seminar Theme': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(5) > dd',
+        'Course Summary': 'li:nth-child({num}) > div.hidden-field > div.outline',
+        'URL': 'li:nth-child({num}) > div.detail-btn-wrapper > a'
+    }
+
+    // スクレイピング実行
+    const dataArray = await scrapePages(searchURLs, selectors, 'object', false, 'array', false);
+
+    // console.log(`@got ${dataArray.length} data`);
+    const nullDeletedDataArray = dataArray[0].filter((data) => data['Subject'] !== undefined); // Subjectが空のデータを削除 
+    // console.log(`null deleted data: ${nullDeletedDataArray}`);
+
+    const results = nullDeletedDataArray.map((data) => {
+        // 加工ゾーン
+        for (const key in data) {
+            data[key] = data[key].replaceAll('  ', ''); // ダブルスペースを削除
+            if (!(key == 'Course Summary' || key == 'Lecturer Name')) {
+                console.log(`key: ${key}`);
+                data[key] = data[key].replaceAll('\n', ''); // 改行を削除
+            }
+            switch (key) {
+                case 'Year/Semester': // 年度と学期を分割
+                    [data['Year'], data['Semester']] = data[key].split(' ');
+                case 'Day of Week・Period': // 曜日と時限を分割
+                    data['Day of Week'] = [];
+                    data['Period'] = [];
+                    const dayOfWeek_period = data[key].split(',');
+                    for (let i = 0; i < dayOfWeek_period.length; i++) {
+                        [day, period] = dayOfWeek_period[i].split(' ');
+                        data['Day of Week'].push(day);
+                        data['Period'].push(period);
+                    }
+                    break;
+                case 'Lecturer Name': // 教員名を分割
+                    data[key] = data[key].split('\n').filter((name) => name !== ''); // 教員名を分割&空の要素を削除
+                    break;
+                case 'URL': // URLを加工
+                    data[key] = HOST_URL + data[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return data;
+    });
+
+    return results;
+}
+
+
+
 // シラバスのコース詳細ページをスクレイピングする関数
 async function scrapeSyllabus(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles='') {
     console.log('#scrape syllabus');
