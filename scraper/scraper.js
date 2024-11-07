@@ -60,7 +60,14 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
 // 複数のURLをスクレイピングする関数
 async function scrapePages(urls, selectors, type='text', save=false, form='connect', urlsave=false) {
     let timeRemain = urls.length; // 残り時間を初期化
-    console.log(`#scrape pages. estimated time: ${timeRemain}sec`); // 残り時間を表示
+    estTimes = '';
+    const execHour = Math.floor(timeRemain / 3600); // 実行時間の時間部分
+    if (execHour > 0) estTimes += `${execHour}h`; // 残り時間に時間部分を追加
+    const execMin = Math.floor((timeRemain % 3600) / 60); // 実行時間の分部分
+    if (execMin > 0) estTimes += `${execMin}m`; // 残り時間に分部分を追加
+    const execSec = timeRemain % 60; // 最大実行時間の秒部分
+    if (execSec > 0) estTimes += `${execSec}s`; // 残り時間に秒部分を追加
+    console.log('#scrape pages. estimated time:', estTimes); // 残り時間を表示
     let datas; // データを格納する変数を初期化
     switch (form) {
         case 'connect':
