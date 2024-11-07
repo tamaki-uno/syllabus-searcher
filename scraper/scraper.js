@@ -69,6 +69,8 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
                     break;
             }
         }
+        }
+
         console.log(`*Scraped: ${url} <scrape()>`);
         // console.log(selectors);
         // console.log('*Scraped:', data);
