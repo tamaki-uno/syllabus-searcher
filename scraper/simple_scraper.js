@@ -10,7 +10,11 @@ const HOST_URL = 'https://syllabus.sfc.keio.ac.jp'; // ホスト名のURL
 async function scrape(url, selectors, num=1, delay=1000) {
     try {
         console.log(`#scrape ${url}`); // 開始メッセージ
-        await new Promise(resolve => setTimeout(resolve, delay)); // 1秒待機
+        // await new Promise(resolve => setTimeout(resolve, delay)); // 1秒待機
+        // let timeFlag = false; // タイムアウトフラグ
+        // setTimeout(() => timeFlag = true, 1000); // 1秒後にタイムアウトフラグをtrueにする
+        const timeFlag = new Promise((resolve) => setTimeout(resolve, 1000)); // 1秒後にresolveするPromise
+
         const response = await axios.get(url); // リクエストを送信
         const html = response.data; // レスポンスのHTMLを取得
         const $ = cheerio.load(html); // cheerioを使ってHTMLを解析
@@ -32,6 +36,8 @@ async function scrape(url, selectors, num=1, delay=1000) {
             }
             objArray.push(obj); // オブジェクトを配列に追加
         }
+
+        await timeFlag; // 1秒待機
         return objArray; // データを返す
     } catch (error) {
         console.error(`Scrape Error: ${error} <scrape()>`);
