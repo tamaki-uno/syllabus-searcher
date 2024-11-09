@@ -51,7 +51,7 @@ async function scrapePages(urls, selectors, num=1) {
     console.log('#scrape pages. estimated time:', estTimes); // 残り時間を表示
     let datas = []; // データを初期化
     for (const url of urls) {
-        if (timeRemain % 10 === 0) console.log(`time remain: ${timeRemain}sec`); // 10秒ごとに残り時間を表示
+        if (timeRemain % 10 === 0) console.log(`time remain: ${timeConverter(timeRemain)}`); // 残り時間を10秒ごとに表示
         const data = await scrape(url, selectors, num); // スクレイピング実行
         datas.push(...data); // データを結合
         // await new Promise(resolve => setTimeout(resolve, 1000)); // 1秒待機
