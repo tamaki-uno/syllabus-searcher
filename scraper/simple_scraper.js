@@ -60,6 +60,64 @@ async function scrapePages(urls, selectors, num=1) {
     return datas;
 }
 
+// 時間を変換する関数
+function timeConverter(time) {
+    let result = '';
+    const Hour = Math.floor(time / 3600); // 時間部分
+    const Minute = Math.floor((time % 3600) / 60); // 分部分
+    const Second = time % 60; // 秒部分
+    if (Hour > 0) result += `${Hour}h`; // 時間部分が0より大きい場合は追加
+    if (Minute > 0) result += `${Minute}min`; // 分部分が0より大きい場合は追加
+    if (Second > 0) result += `${Second}sec`; // 秒部分が0より大きい場合は追加
+    return result; // 結果を返す
+}
+
+/*
+https://syllabus.sfc.keio.ac.jp/courses
+    ?locale=ja
+    &search[title]=
+    &search[year]=2025
+    &search[semester]=
+    &search[sub_semester]=
+    &search[teacher_name]=
+    &search[communication_type][]=online_live
+    &search[communication_type][]=online_ondemand
+    &search[communication_type][]=on_campus
+    &search[day_codes][]=1
+    &search[day_codes][]=2
+    &search[time_codes][]=1
+    &search[time_codes][]=2
+    &search[departments][]=23
+    &search[departments][]=52
+    &search[sfc_guide_title]=23%2F11%2F2014%2F3.Fundamental+Subjects+-+Subjects+of+Language+Communication
+    &search[languages][]=en
+    &search[languages][]=de
+    &search[languages][]=fr
+    &search[languages][]=zh
+    &search[languages][]=ca
+    &search[languages][]=ru
+    &search[languages][]=ko
+    &search[languages][]=sr
+    &search[languages][]=el
+    &search[languages][]=ja
+    &search[languages][]=pt
+    &search[languages][]=id
+    &search[languages][]=ar
+    &search[languages][]=it
+    &search[languages][]=th
+    &search[languages][]=99
+    &search[summary]=
+    &search[locations][]=sfc
+    &search[locations][]=ttck
+    &search[locations][]=other
+    &search[styles][]=lecture
+    &search[styles][]=work
+    &search[styles][]=practical_training
+    &search[styles][]=groupwork
+    &button=
+*/
+
+
 // シラバスの検索結果ページのURLを生成する関数
 function searchURIGenerator(page='', title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
     // URLのクエリパラメータを変更して検索結果ページを取得 &つなぎでパラメータを追加 順番は関係ないかもしれない
