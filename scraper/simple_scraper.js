@@ -41,14 +41,7 @@ async function scrape(url, selectors, num=1, delay=1000) {
 // 複数のURLをスクレイピングする関数
 async function scrapePages(urls, selectors, num=1) {
     let timeRemain = urls.length; // 残り時間を初期化
-    estTimes = '';
-    const execHour = Math.floor(timeRemain / 3600); // 実行時間の時間部分
-    if (execHour > 0) estTimes += ` ${execHour}hrs`; // 残り時間に時間部分を追加
-    const execMin = Math.floor((timeRemain % 3600) / 60); // 実行時間の分部分
-    if (execMin > 0) estTimes += ` ${execMin}min`; // 残り時間に分部分を追加
-    const execSec = timeRemain % 60; // 最大実行時間の秒部分
-    if (execSec > 0) estTimes += ` ${execSec}sec`; // 残り時間に秒部分を追加
-    console.log('#scrape pages. estimated time:', estTimes); // 残り時間を表示
+    console.log('#scrape pages. estimated time:', timeConverter(timeRemain)); // 開始メッセージ
     let datas = []; // データを初期化
     for (const url of urls) {
         if (timeRemain % 10 === 0) console.log(`time remain: ${timeConverter(timeRemain)}`); // 残り時間を10秒ごとに表示
