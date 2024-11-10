@@ -142,24 +142,22 @@ function searchQueryParameterGenerator(page='', title='', year='', semester='', 
 
 async function searchURIsGenerator(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
     console.log('#search URIs generator'); // 開始メッセージ
-    const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
+    const firstPageQueryParameter = searchQueryParameterGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のクエリパラメータを生成
+    const firstPageURL = `${HOST_URL}/courses?locale=ja&${firstPageQueryParameter}`; // 1ページ目のURLを生成
     const firstPageSelector = {
         'URL': 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'
     }; // セレクタを定義 (最終ページを取得するためのセレクタ)
-    const lastPageURLObjArray = await scrape(searchFirstURL, firstPageSelector); // 最終ページのURLを取得
-    const lastPageURL = lastPageURLObjArray[0]['URL']; // 最終ページのURLを取得
-    console.log('lastPageURL:', lastPageURL); // 最終ページのURLを表示
-    let lastPageNum = 1; // ページ数を1に固定
-    if (lastPageURL !== undefined) { // 最終ページが存在する場合
-        lastPageNum = lastPageURL.split('page=')[1].split('&')[0]; // 最終ページ番号を取得
-    }
-    const PAGE_NUM = Number(lastPageNum); // 最終ページ番号を数値に変換
-    console.log(`# ${PAGE_NUM} pages matched to your search criteria.`); // ページ数を表示
+    const lastPageURL = (await scrape(firstPageURL, firstPageSelector))['URL']; // 最終ページのURLを取得
+    const PAGE_NUM = lastPageURL ? Number(lastPageURL.split('page=')[1].split('&')[0]) : 1; // ページ数を取得 (最終ページが存在する場合は最終ページ番号をURLから取得、存在しない場合は1を代入)
+    console.log(`*${PAGE_NUM} pages matched to your search criteria.`); // ページ数を表示
 
     const urls = [];
     // ページ数分のURLを生成
     for (let page = 1; page <= PAGE_NUM; page++) {
-        urls.push(searchURIGenerator(page, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles));
+        const searchQueryParameter = searchQueryParameterGenerator(page, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // クエリパラメータを生成
+        const jaURL = `${HOST_URL}/courses?locale=ja${searchQueryParameter}`; // 日本語版のURLを生成
+        const enURL = `${HOST_URL}/courses?locale=en${searchQueryParameter}`; // 英語版のURLを生成
+        urls.push(jaURL, enURL); // URLを配列に追加
     }
     return urls;
 }
