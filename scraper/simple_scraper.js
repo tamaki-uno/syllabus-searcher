@@ -270,7 +270,7 @@ async function main(){
     const data = await scrapeSyllabusSimply(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title); // スクレイピング実行
 
     const now = new Date(); // 現在時刻を取得
-    let timeStamp = ''; // タイムスタンプを初期化
+    let timeStamp = ''; // タイムスタンプを初期化 (YYYY-MM-DD_HH-MM-SS)
     timeStamp += String(now.getFullYear()).padStart(4, '0'); // 現在の年を取得 このパディングが使われることはないだろ(笑)
     timeStamp += '-' + String(now.getMonth() + 1).padStart(2, '0'); // 現在の月を取得 2桁になるようにパディング　以下同様
     timeStamp += '-' + String(now.getDate()).padStart(2, '0'); // 現在の日を取得
@@ -278,7 +278,7 @@ async function main(){
     timeStamp += String(now.getHours()).padStart(2, '0'); // 現在の時を取得
     timeStamp += '-' + String(now.getMinutes()).padStart(2, '0'); // 現在の分を取得
     timeStamp += '-' + String(now.getSeconds()).padStart(2, '0'); // 現在の秒を取得
-    const filepath = `data\\data_${timeStamp}_${year}-${semester}.json`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.json)
+    const filepath = `data\\data_${timeStamp}_${year}-${semester}.json`; // ファイル名 (data_タイムスタンプ_年度-学期.json)
     console.log('filepath:', filepath); // ファイル名を表示
 
     // await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルにデータを書き込み
