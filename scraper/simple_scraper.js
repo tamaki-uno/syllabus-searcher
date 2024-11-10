@@ -11,8 +11,6 @@ async function scrape(url, selectors, num=1, delay=1000) {
     try {
         console.log(`#scrape ${url}`); // 開始メッセージ
         // await new Promise(resolve => setTimeout(resolve, delay)); // 1秒待機
-        // let timeFlag = false; // タイムアウトフラグ
-        // setTimeout(() => timeFlag = true, 1000); // 1秒後にタイムアウトフラグをtrueにする
         const timeFlag = new Promise((resolve) => setTimeout(resolve, 1000)); // 1秒後にresolveするPromise
 
         const response = await axios.get(url); // リクエストを送信
