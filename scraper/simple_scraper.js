@@ -281,7 +281,7 @@ async function main(){
     const filepath = `data\\data_${timeStamp}_${year}-${semester}.json`; // ファイル名 (data_タイムスタンプ_年度-学期.json)
     console.log('filepath:', filepath); // ファイル名を表示
 
-    // await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルにデータを書き込み
+    await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルにデータを書き込み
     // console.log('data:', data); // データを表示
 
     const endTime = new Date(); // 終了時刻を取得
