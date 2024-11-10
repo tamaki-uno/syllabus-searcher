@@ -51,10 +51,10 @@ async function scrape(url, selectors, num=1, delay=1000, onlyUrl=false) {
 // 複数のURLをスクレイピングする関数
 async function scrapePages(urls, selectors, num=1) {
     let timeRemain = urls.length; // 残り時間を初期化
-    console.log('#scrape pages. estimated time:', timeConverter(timeRemain)); // 開始メッセージ
+    console.log('#scrape pages. estimated time:', timeConverter(timeRemain*1000)); // 開始メッセージ
     let datas = []; // データを初期化
     for (const url of urls) {
-        if (timeRemain % 10 === 0) console.log(`time remain: ${timeConverter(timeRemain)}`); // 残り時間を10秒ごとに表示
+        if (timeRemain % 10 === 0) console.log(`time remain: ${timeConverter(timeRemain*1000)}`); // 残り時間を10秒ごとに表示
         const data = await scrape(url, selectors, num); // スクレイピング実行
         datas.push(...data); // データを結合
         // await new Promise(resolve => setTimeout(resolve, 1000)); // 1秒待機
@@ -64,13 +64,16 @@ async function scrapePages(urls, selectors, num=1) {
 }
 
 // 時間を変換する関数
-function timeConverter(time) {
+function timeConverter(ms) {
     let result = '';
-    const Hour = Math.floor(time / 3600); // 時間部分
-    const Minute = Math.floor((time % 3600) / 60); // 分部分
-    const Second = time % 60; // 秒部分
-    if (Hour > 0) result += `${Hour}h`; // 時間部分が0より大きい場合は追加
-    if (Minute > 0) result += `${Minute}min`; // 分部分が0より大きい場合は追加
+    const s = ms / 1000; // 秒に変換
+    const m = s / 60; // 分に変換
+    const h = m / 60; // 時間に変換
+    const Hour = Math.floor(h); // 時間部分
+    const Minute = Math.floor(m % 60); // 分部分
+    const Second = Math.floor(s % 60); // 秒部分
+    if (Hour > 0) result += `${Hour}h `; // 時間部分が0より大きい場合は追加
+    if (Minute > 0) result += `${Minute}min `; // 分部分が0より大きい場合は追加
     if (Second > 0) result += `${Second}sec`; // 秒部分が0より大きい場合は追加
     return result; // 結果を返す
 }
