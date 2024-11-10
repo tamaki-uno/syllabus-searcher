@@ -247,6 +247,7 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
 // メイン関数
 async function main(){
     console.log('*start'); // 開始メッセージ
+    const startTime = new Date(); // 開始時刻を取得
     // スクレイピング検索条件
     const title = '';
     const year = '2024';
@@ -283,7 +284,10 @@ async function main(){
     // await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルにデータを書き込み
     // console.log('data:', data); // データを表示
 
-    console.log('done'); // 完了メッセージ
+    const endTime = new Date(); // 終了時刻を取得
+    const elapsedTime = endTime - startTime; // 経過時間を取得
+    console.log(`*end. elapsed time: ${timeConverter(elapsedTime)}`); // 経過時間を表示
+    // console.log('done'); // 完了メッセージ
 }
 
 main();
