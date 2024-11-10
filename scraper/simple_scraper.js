@@ -157,7 +157,7 @@ async function searchURIsGenerator(title='', year='', semester='', sub_semester=
         'URL': 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'
     }; // セレクタを定義 (最終ページを取得するためのセレクタ)
     const lastPageURL = await scrape(firstPageURL, firstPageSelector, 1, 1000, true); // 最終ページのURLを取得
-    console.log(`*lastPageURL: ${lastPageURL}`); // 最終ページのURLを表示
+    // console.log(`*lastPageURL: ${lastPageURL}`); // 最終ページのURLを表示
     const PAGE_NUM = lastPageURL ? Number(lastPageURL.split('page=')[1].split('&')[0]) : 1; // ページ数を取得 (最終ページが存在する場合は最終ページ番号をURLから取得、存在しない場合は1を代入)
     console.log(`*${PAGE_NUM} pages matched to your search criteria.`); // ページ数を表示
 
@@ -177,7 +177,7 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
     console.log('#scrape syllabus simply'); // 開始メッセージ
 
     const searchURLs = await searchURIsGenerator(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 検索結果ページのURLを生成
-    console.log('searchURLs:', searchURLs); // 検索結果ページのURLを表示
+    // console.log('searchURLs:', searchURLs); // 検索結果ページのURLを表示
 
     // セレクタを定義 (URLを取得するためのセレクタ)
     const selectors = {
@@ -229,7 +229,7 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
                     data[key] = data[key].split('\n').filter((name) => name !== ''); // 教員名を分割&空の要素を削除
                     break;
                 case 'URL': // URLを加工
-                    data[key] = HOST_URL + data[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
+                    // data[key] = data[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
                     break;
                 case 'Course Summary': // コース概要を加工
                     data[key] = data[key].replace('\n', ''); // 先頭の改行を削除
