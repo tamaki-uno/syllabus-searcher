@@ -116,14 +116,10 @@ https://syllabus.sfc.keio.ac.jp/courses
 
 
 // シラバスの検索結果ページのURLを生成する関数
-function searchURIGenerator(page='', title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
-    // URLのクエリパラメータを変更して検索結果ページを取得 &つなぎでパラメータを追加 順番は関係ないかもしれない
-    let uri = `${HOST_URL}/courses`; // ホストURLを追加 これはURL 以下からURI
-    let enUri = `${HOST_URL}/courses`; // 英語版のURL
-
+function searchQueryParameterGenerator(page='', title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
+    // https://syllabus.sfc.keio.ac.jp/courses?locale=en&search[title]=Title&search[year]=2025&search[semester]=fullyear&search[sub_semester]=first&search[teacher_name]=Lecturer-Name&search[communication_type][]=online_live&search[day_codes][]=1&search[time_codes][]=1&search[departments][]=23&search[sfc_guide_title]=23%2F11%2F2014%2F2.Fundamental+Subjects+-+Introductory+Subjects&search[languages][]=id&search[summary]=Summary&search[locations][]=sfc&search[styles][]=lecture&button=
     // クエリパラメータを追加 (空の場合は追加しない)
-    uri += '?locale=ja'; // 言語
-    enUri += '?locale=en'; // 英語版の言語
+
     let queryParameters = ''; // 検索クエリを初期化
     if (page) (page === '1') ? queryParameters += '' : queryParameters += `&page=${page}`; // ページ番号 (1ページ目の場合は何も追加しない)
     if (title) queryParameters += `&search[title]=${title}`; // タイトル
@@ -141,12 +137,7 @@ function searchURIGenerator(page='', title='', year='', semester='', sub_semeste
     if (styles) queryParameters += `&search[styles][]=${styles}`; // スタイル
     // queryParameters += '&button='; // ボタン
 
-    // const url = encodeURI(uri); // URIエンコードしてURIを生成 (日本語などの文字列をエンコード)
-    // const enUrl = encodeURI(enUri); // 英語版のURIを生成
-    const url = uri + queryParameters; // URIを生成
-    const enUrl = enUri + queryParameters; // 英語版のURIを生成
-
-    return url, enUrl; // URLを返す
+    return queryParameters; // クエリパラメータを返す
 }
 
 async function searchURIsGenerator(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
