@@ -7,7 +7,7 @@ const fs = require('fs'); // ファイル操作
 const HOST_URL = 'https://syllabus.sfc.keio.ac.jp'; // ホスト名のURL
 
 // スクレイピングする関数
-async function scrape(url, selectors, num=1, delay=1000) {
+async function scrape(url, selectors, num=1, delay=1000, onlyUrl=false) {
     try {
         console.log(`#scrape ${url}`); // 開始メッセージ
         // await new Promise(resolve => setTimeout(resolve, delay)); // 1秒待機
@@ -16,6 +16,12 @@ async function scrape(url, selectors, num=1, delay=1000) {
         const response = await axios.get(url); // リクエストを送信
         const html = response.data; // レスポンスのHTMLを取得
         const $ = cheerio.load(html); // cheerioを使ってHTMLを解析
+
+        if (onlyUrl) {
+            const url = $(selectors['URL']).attr('href'); // URLを取得
+            await timeFlag; // 1秒待機
+            return url; // URLを返す
+        }
 
         // 要素の取得
         const objArray = [];
@@ -147,7 +153,8 @@ async function searchURIsGenerator(title='', year='', semester='', sub_semester=
     const firstPageSelector = {
         'URL': 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'
     }; // セレクタを定義 (最終ページを取得するためのセレクタ)
-    const lastPageURL = (await scrape(firstPageURL, firstPageSelector))['URL']; // 最終ページのURLを取得
+    const lastPageURL = await scrape(firstPageURL, firstPageSelector, 1, 1000, true); // 最終ページのURLを取得
+    console.log(`*lastPageURL: ${lastPageURL}`); // 最終ページのURLを表示
     const PAGE_NUM = lastPageURL ? Number(lastPageURL.split('page=')[1].split('&')[0]) : 1; // ページ数を取得 (最終ページが存在する場合は最終ページ番号をURLから取得、存在しない場合は1を代入)
     console.log(`*${PAGE_NUM} pages matched to your search criteria.`); // ページ数を表示
 
