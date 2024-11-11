@@ -63,7 +63,7 @@ async function scrape(url, selectors, type='text', save=false, urlsave=false) {
                     const valueNode = node;
                     const value = valueNode.text();
                     data[key] = value;
-                    break;
+                    break;                   
                 default:
                     console.error('Invalid type <scrape()>');
                     break;
@@ -86,11 +86,11 @@ async function scrapePages(urls, selectors, type='text', save=false, form='conne
     let timeRemain = urls.length; // 残り時間を初期化
     estTimes = '';
     const execHour = Math.floor(timeRemain / 3600); // 実行時間の時間部分
-    if (execHour > 0) estTimes += `${execHour}h`; // 残り時間に時間部分を追加
+    if (execHour > 0) estTimes += ` ${execHour}hrs`; // 残り時間に時間部分を追加
     const execMin = Math.floor((timeRemain % 3600) / 60); // 実行時間の分部分
-    if (execMin > 0) estTimes += `${execMin}m`; // 残り時間に分部分を追加
+    if (execMin > 0) estTimes += ` ${execMin}min`; // 残り時間に分部分を追加
     const execSec = timeRemain % 60; // 最大実行時間の秒部分
-    if (execSec > 0) estTimes += `${execSec}s`; // 残り時間に秒部分を追加
+    if (execSec > 0) estTimes += ` ${execSec}sec`; // 残り時間に秒部分を追加
     console.log('#scrape pages. estimated time:', estTimes); // 残り時間を表示
     let datas; // データを格納する変数を初期化
     switch (form) {
@@ -153,11 +153,12 @@ function searchURIGenerator(page='', title='', year='', semester='', sub_semeste
 
 // 複数の検索結果ページをスクレイピングしてURLを取得する関数
 async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
-
-    const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
-    const firstPageSelector = {last: 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'}; // セレクタを定義 (最終ページを取得するためのセレクタ)
-    const lastPageURL = await scrape(searchFirstURL, firstPageSelector, 'url', false, false); // 最終ページのURLを取得
-    const lastPageNum = lastPageURL['last'].split('page=')[1].split('&')[0]; // 最終ページ番号を取得
+    
+    // const searchFirstURL = searchURIGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のURLを生成
+    // const firstPageSelector = {last: 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'}; // セレクタを定義 (最終ページを取得するためのセレクタ)
+    // const lastPageURL = await scrape(searchFirstURL, firstPageSelector, 'url', false, false); // 最終ページのURLを取得
+    // const lastPageNum = lastPageURL['last'].split('page=')[1].split('&')[0]; // 最終ページ番号を取得
+    const lastPageNum = 1; // ページ数を1に固定
 
     const PAGE_NUM = Number(lastPageNum); // 最終ページ番号を数値に変換
 
@@ -181,13 +182,13 @@ async function scrapePagesToGetUrls(title='', year='', semester='', sub_semester
     // URLの配列を作成
     const urls = [];
     for (const urlsObj of urlsObjArray) {
-    for (const key in urlsObj) {
-        if (Object.prototype.hasOwnProperty.call(urlsObj, key)) {
-            const url = HOST_URL + urlsObj[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
-            urls.push(url + '?locale=ja'); // URLを配列に追加 (日本語)
-            urls.push(url + '?locale=en'); // URLを配列に追加 (英語)
+        for (const key in urlsObj) {
+            if (Object.prototype.hasOwnProperty.call(urlsObj, key)) {
+                const url = HOST_URL + urlsObj[key].replace('?locale=ja', ''); // URLのlocale=jaを削除
+                urls.push(url + '?locale=ja'); // URLを配列に追加 (日本語)
+                urls.push(url + '?locale=en'); // URLを配列に追加 (英語)
+            }
         }
-    }
     }
     
     console.log(`@got ${urls.length} urls`);
@@ -288,7 +289,7 @@ async function scrapeSyllabus(title='', year='', semester='', sub_semester='', t
     // const pageNums = 10; // ページ数
     // 条件に合う詳細ページのURLを取得
     const urls = await scrapePagesToGetUrls(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles);
-
+    
     // const maximumExecutionTime = urls.length; // 最大実行時間 (検索結果ページ数 + 1ページあたりのURLの最大数 * 検索結果ページ数)
     // const maxEstHour = Math.floor(maximumExecutionTime / 3600); // 最大実行時間の時間部分
     // const maxEstMin = Math.floor((maximumExecutionTime % 3600) / 60); // 最大実行時間の分部分
@@ -299,12 +300,16 @@ async function scrapeSyllabus(title='', year='', semester='', sub_semester='', t
     // const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
 
     const selectors = {
-        Subject: 'div.main > div > h2 > span.title',
+        'Subject': 'div.main > div > h2 > span.title',
+
         'Faculty/Graduate School': 'div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
         'Course Registration Number': 'div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
         'Subject Sort': 'div.class-info > div > dl:nth-child(2) > dd:nth-child(2)',
         'Title': 'div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
-        'year/semester': 'div.class-info > div > dl:nth-child(4) > dd:nth-child(2)'
+        'Field': 'div.class-info > div > dl:nth-child(3) > dd:nth-child(2)',
+        'Units': 'div.class-info > div > dl:nth-child(3) > dd:nth-child(4)',
+        'year/semester': 'div.class-info > div > dl:nth-child(4) > dd:nth-child(2)',
+        'K-Number': 'div.class-info > div > dl:nth-child(4) > dd:nth-child(4)',
     }
 
     // uri += '?locale=ja'; // 言語
@@ -328,21 +333,17 @@ async function scrapeSyllabus(title='', year='', semester='', sub_semester='', t
     // const dataArray = await scrapePages(urls, selectors, 'text', false, 'array', true);
     const dataArray = await scrapePages(urls, selectors, 'html', false, 'array', true);
 
-    // const results = [];
-    // for (data of dataArray) {
-    //     // console.log('data:', data);
-    //     if (data['body'] === undefined) return 'couldnt find body from:'+data[URL] ; // データが取得できなかった場合はスキップ
-    //     const shapedData = data['body'].replaceAll('  ', ''); // 余分なスペースを削除
-    //     const formatedData = shapedData.split('\n'); // 改行で分割
-    //     const blanklessData = formatedData.filter((value) => value !== ''); // 空白行を削除
-    //     // console.log('formatedData:', formatedData);
-    //     const resultArray = [
-    //         data['URL'],
-    //         blanklessData,
-    //     ]; // 結果の配列を作成、URLと本文を格納
+    const results = dataArray.map((data) => {
+        for (const key in data) {
+            if (Object.prototype.hasOwnProperty.call(data, key)) {
+                // data[key] = data[key].replaceAll('  ', ''); // ダブルスペースを削除
+                // data[key] = data[key].replaceAll(' \n', ''); // スペースと改行を削除
+            };
+        }
+        [data['Year'], data['Semester']] = data['year/semester'].split(' ');
+        return data;
+    });
 
-        results.push(resultArray); // 結果を配列に追加
-    }
     console.log(`scraped ${results.length} courses`);
     // return data;
     return results;
@@ -351,15 +352,14 @@ async function scrapeSyllabus(title='', year='', semester='', sub_semester='', t
 // メイン関数
 async function main(){
     console.log('start'); // 開始メッセージ
-    // const pageNums = 56;　// 2024年度　秋学期は56ページ
-    const pageNums = 108; // 2024年度　春学期・秋学期を合わせて108ページ
     const title = '';
     const year = '2024';
     const semester = '';
 
     const now = new Date(); // 現在時刻を取得
     // const filename = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}.json`; // ファイル名 (data_年/月/日_時:分:秒.json)
-    const filepath = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${pageNums}_${title}_${year}_${semester}.csv`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.csv)
+    // const filepath = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${pageNums}_${title}_${year}_${semester}.csv`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.csv)
+    const filepath = `data\\data_${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}_${now.getHours()}-${now.getMinutes()}-${now.getSeconds()}_${year}_${semester}.json`; // ファイル名 (data_年-月-日_時-分-秒_ページ数_タイトル_年度_学期.json)
     console.log('filepath:', filepath); // ファイル名を表示
 
     // // 引数から取得
@@ -367,65 +367,52 @@ async function main(){
     // // process.argv[2]以降が引数
     // const pageNums, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles = process.argv.slice(2);
 
-    const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
+    // const data = await scrapeSyllabus(pageNums, title, year, semester); // スクレイピング実行
+    const data = await scrapeSyllabusSimply(title, year, semester); // スクレイピング実行
 
-    const bom = '\uFEFF'; // BOM (Byte Order Mark) UTF-8の場合は'\uFEFF'を先頭につけることでExcelで開いたときに文字化けを防ぐことができる
-    const mimetype = 'text/csv'; // MIMEタイプ
-    const charset = 'utf-8'; // 文字コード
-    const header = 'absent' // ヘッダーの有無 (ある場合は'present'、ない場合は'absent')
-    const csvContent = `${bom}data:${mimetype};charset=${charset};header=${header}` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
+    // const bom = '\uFEFF'; // BOM (Byte Order Mark) UTF-8の場合は'\uFEFF'を先頭につけることでExcelで開いたときに文字化けを防ぐことができる
+    // const mimetype = 'text/csv'; // MIMEタイプ
+    // const charset = 'utf-8'; // 文字コード
+    // const header = 'absent' // ヘッダーの有無 (ある場合は'present'、ない場合は'absent')
+    // const csvContent = `${bom}data:${mimetype};charset=${charset};header=${header}` + data.map(e => e.join(',')).join('\n'); // CSV形式に変換 子配列を','で結合、それらの親配列を改行で結合
 
     // fs.writeFileSync('data.json', JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFileSync(filename, JSON.stringify(data, null, 4)); // ファイルに保存
     // fs.writeFile(filename, JSON.stringify(data, null, 4), (err) => {
     //     if (err) throw err;
     // }); // ファイルに保存
-    fs.writeFileSync(filepath, csvContent); // ファイルに保存
+
+    // fs.writeFileSync(filepath, csvContent); // ファイルに保存
+
+    await fs.writeFileSync(filepath, JSON.stringify(data, null, 4)); // ファイルに保存
 
     console.log('done'); // 完了メッセージ
 }
 
 async function test(){
-    const url = 'https://syllabus.sfc.keio.ac.jp/courses?locale=ja&page=15&search%5Byear%5D=2024';
-    const selectors = {};
-    // const selectors = {body: 'body'}; // セレクタを定義 (本文を取得するためのセレクタ)
-    // const selectors = {result: 'body > div.main > div > div.right-column > div.result'} // セレクタを定義 (検索結果を取得するためのセレクタ)
-    // const selectors = {detailBtn: '.detail-btn'}
-    for (let i = 1; i <= 25; i++) {
-        // selectors[`a${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper > a`;
-        // selectors[`wrapper${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper`;
-        // selectors[`url${i}`] = `.detail-btn:nth-child(${i})`;
-        selectors[`url${i}`] = `li:nth-child(${i}) > div.detail-btn-wrapper > a`;
-    }
-    // body > div.main > div > div.right-column > div.result > ul > li:nth-child(1) > div.detail-btn-wrapper > a
-    // const type = 'html';
-    // const type = 'node';
-    const type = 'url';
-    const save = false;
-    const urlsave = false;
+    // https://syllabus.sfc.keio.ac.jp/courses?locale=ja&search[title]=&search[year]=2024&search[semester]=fall&search[sub_semester]=&search[teacher_name]=&search[sfc_guide_title]=23%2F11%2F2014%2F2.Fundamental+Subjects+-+Introductory+Subjects&search[summary]=&button=
+    const title = '';
+    const year = '2024';
+    const semester = 'fall';
+    const sub_semester = '';
+    const teacher_name = '';
+    const day_codes = '';
+    const time_codes = '';
+    const departments = '';
+    const sfc_guide_title = '23/11/2014/2.Fundamental Subjects - Introductory Subjects';
+    const languages = '';
+    const summary = '';
+    const locations = '';
+    const styles = '';
 
-    const data = await scrape(url, selectors, type, save, urlsave); // スクレイピング実行
-    const body = data['body'];
+    // const data = await scrapeSyllabus(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // スクレイピング実行
 
-    // const urls = [];
-    // let start = 0;
-    // while (body.indexOf('href="', start) !== -1) {
-    //     const urlStart = body.indexOf('href="', start) + 6;
-    //     // console.log(`urlStart: ${urlStart}`);
-    //     const urlEnd = body.indexOf('"', urlStart);
-    //     const url = body.slice(urlStart, urlEnd);
-    //     urls.push(url);
-    //     start = urlEnd;
-    // }
-    // const jsDeletedUrls = urls.filter(url => url.indexOf('javascript') === -1);
-    // const httpsUrls = urls.filter(url => url.indexOf('https') !== -1);
-    
+    const data = await scrapeSyllabusSimply(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // スクレイピング実行
+
     console.log(data);
-    // console.log(urls);
-    // console.log(jsDeletedUrls);
-    // console.log(httpsUrls);
+
 }
 
-// main();
+main();
 
-test();
+// test();
