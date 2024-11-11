@@ -64,7 +64,7 @@ async function scrapePages(urls, selectors, num=1) {
 }
 
 // 時間を変換する関数
-function timeConverter(ms) {
+function timeConverter(ms, option='') {
     let result = '';
     const s = ms / 1000; // 秒に変換
     const m = s / 60; // 分に変換
@@ -75,6 +75,7 @@ function timeConverter(ms) {
     if (Hour > 0) result += `${Hour}h `; // 時間部分が0より大きい場合は追加
     if (Minute > 0) result += `${Minute}min `; // 分部分が0より大きい場合は追加
     if (Second > 0) result += `${Second}sec`; // 秒部分が0より大きい場合は追加
+    if (option === 'ms') result += `${ms}ms`; // ミリ秒を追加
     return result; // 結果を返す
 }
 
@@ -152,7 +153,7 @@ function searchQueryParameterGenerator(page='', title='', year='', semester='', 
 async function searchURIsGenerator(title='', year='', semester='', sub_semester='', teacher_name='', day_codes='', time_codes='', departments='', sfc_guide_title='', languages='', summary='', locations='', styles=''){
     console.log('#search URIs generator'); // 開始メッセージ
     const firstPageQueryParameter = searchQueryParameterGenerator(1, title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 1ページ目のクエリパラメータを生成
-    const firstPageURL = `${HOST_URL}/courses?locale=ja&${firstPageQueryParameter}`; // 1ページ目のURLを生成
+    const firstPageURL = `${HOST_URL}/courses?locale=ja${firstPageQueryParameter}`; // 1ページ目のURLを生成
     const firstPageSelector = {
         'URL': 'body > div.main > div > div.right-column > div.pager > nav > span.last > a'
     }; // セレクタを定義 (最終ページを取得するためのセレクタ)
@@ -179,9 +180,8 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
     const searchURLs = await searchURIsGenerator(title, year, semester, sub_semester, teacher_name, day_codes, time_codes, departments, sfc_guide_title, languages, summary, locations, styles); // 検索結果ページのURLを生成
     // console.log('searchURLs:', searchURLs); // 検索結果ページのURLを表示
 
-    // セレクタを定義 (URLを取得するためのセレクタ)
+    // セレクタを定義
     const selectors = {
-        // 'num': 25,
         'Subject': 'li:nth-child({num}) > h2',
         'Faculty/Graduate School': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(1) > dd:nth-child(2)',
         'Course Registration Number': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(1) > dd:nth-child(4)',
@@ -189,10 +189,10 @@ async function scrapeSyllabusSimply(title='', year='', semester='', sub_semester
         'Field': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(2) > dd:nth-child(4)',
         'Units': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(3) > dd:nth-child(2)',
         'K-Number': 'li:nth-child({num}) > div.class-info > div > dl:nth-child(3) > dd:nth-child(4)',
-        'year/semester': 'li:nth-child({num}) > div.class-info > dl:nth-child(2) > dd',
+        'Year/Semester': 'li:nth-child({num}) > div.class-info > dl:nth-child(2) > dd',
         'Lecturer Name': 'li:nth-child({num}) > div.class-info > dl:nth-child(3) > dd',
         'Class Format': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(1) > dd',
-        'class Style': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(2) > dd',
+        'Class Style': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(2) > dd',
         'Day of Week・Period': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(3) > dd',
         'Language': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(4) > dd',
         'Research Seminar Theme': 'li:nth-child({num}) > div.hidden-field > div.syllabus-info > dl:nth-child(5) > dd',
@@ -286,7 +286,7 @@ async function main(){
 
     const endTime = new Date(); // 終了時刻を取得
     const elapsedTime = endTime - startTime; // 経過時間を取得
-    console.log(`*end. elapsed time: ${timeConverter(elapsedTime)}`); // 経過時間を表示
+    console.log(`*end. elapsed time: ${timeConverter(elapsedTime, 'ms')}`); // 経過時間を表示
     // console.log('done'); // 完了メッセージ
 }
 
